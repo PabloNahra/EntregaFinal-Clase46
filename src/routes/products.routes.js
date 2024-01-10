@@ -1,6 +1,4 @@
 import { Router } from "express";
-// import { ProdManager } from '../dao/ProductManager.js'
-// import ProdManager from "../dao/ProductManagerMongo.js";
 import { productsModel } from "../models/products.model.js"
 
 const productsRoutes = Router()
@@ -64,8 +62,11 @@ productsRoutes.put('/:uId', async (req, res) => {
   
   try {
     const update = await productsModel.updateOne({_id: uId}, productToUpdate)
-    console.log({update})
-    res.send({message: `Producto modificado existosamente - Id: ${uId}`})
+    if(update.modifiedCount > 0){
+      return res.send({message: `Producto modificado exitosamente - Id: ${uId}`})
+    } else {
+      res.status(404).json({message: `Producto NO modificado - Id: ${uId}`})
+    }
   } catch (error) {
     console.error(error)
     res.status(400).json({message: `No se pudo modificar el producto - ${error}`})

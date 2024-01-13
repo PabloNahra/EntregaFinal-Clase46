@@ -1,19 +1,36 @@
 import { Router } from "express";
 import { productsModel } from "../models/products.model.js"
 
+
 const productsRoutes = Router()
 
 productsRoutes.get('/', async (req, res) => {
-  const { category } = req.query
+  console.log('entre al get de productsRoutes')
+  const { category, page } = req.query
+  // const catReq = category
   try {
+    const products = await productsModel.paginate({}, {limit: 2, page: page})
+    console.log("products")
+    console.log(products)
+    //res.send({products})
+    console.log("Renderizo")
+    res.send({products})
+     //res.render('products', {products: products.docs})
+    
+    /*
     let productos = []
     if(category){
       productos = await productsModel.find({category: category})
+      // const productos = await productsModel.paginate({category: catReq}, {limit: 3, page: 1})
     }
     else{
       productos = await productsModel.find()
+      //const productos = await productsModel.paginate({}, {limit: 3, page: 1})
     }
+    
+    // const productos = await productsModel.paginate({category: category}, {limit: 3, page: 1})
     res.send({productos})
+    */
   } catch (error) {
     console.error(error)
     res.status(400).json({message: `No podemos devolver los productos - ${error}`})

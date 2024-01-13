@@ -11,7 +11,6 @@ import handlebars from 'express-handlebars'
 import viewsRoutes from './routes/views.routes.js'
 import chatsRoutes from './routes/chats.routes.js'
 
-
 const PORT = 8080
 const app = express()
 

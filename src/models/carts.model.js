@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const cartsCollection = 'carts'
 
+/*
 const productSchema = mongoose.Schema({
     productId: {
         type: String,
@@ -13,11 +14,21 @@ const productSchema = mongoose.Schema({
         default: 0
     }
 });
+*/
 
 const cartsSchema = mongoose.Schema({
     products: {
-        type: [productSchema],
-        required: true
+        type: [
+            {
+                product: {
+                    type: mongoose.Schema.ObjectId,
+                    required: true,
+                    ref: 'products'
+                },
+                quantity: Number
+            }
+        ],
+        default: []
     } 
 });
 

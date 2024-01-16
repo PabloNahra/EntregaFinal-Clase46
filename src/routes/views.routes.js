@@ -1,5 +1,5 @@
 import { Router } from "express";
-import productsRoutes from "./products.routes.js";
+import productsRoutes from "./products.routes.js"
 
 
 const viewsRoutes = Router()
@@ -41,7 +41,10 @@ viewsRoutes.get('/products', async (req, res) => {
       console.log("Entre al try")
       // Utiliza directamente el método get de productsRoutes
       const {category, page } = req.query;
-      const products = await productsRoutes.get(category, page);
+      console.log(category)
+      console.log(page)
+      // const { products } = productsRoutes.get({category, page});
+      let { products } = productsRoutes.get({});
       console.log("products")
       console.log(products)
       // Renderiza la vista 'products' con el objeto products como contexto
@@ -52,8 +55,6 @@ viewsRoutes.get('/products', async (req, res) => {
       res.status(500).send('Error interno del servidor');
     }
 })
-
-
 
 
 export default viewsRoutes

@@ -1,15 +1,21 @@
 import fs from 'fs'
+import { productsModel } from "../models/products.model.js"
+// import mongoosePaginate from 'mongoose-paginate-v2'
 
-export class ProdManager{
+
+export class ProdManager {
     constructor(path){
         this.path = path;
     }
 
+    /*
     async getLength() {
         const products = await this.getProducts()
         return products.length
     }
+    */
 
+    /*
     async getMaxId() {
         const products = await this.getProducts();
     
@@ -23,15 +29,21 @@ export class ProdManager{
     
         return maxId;
     }
-    
+    */
 
-    async getProducts(){
+    async getProducts(limit=10, page=1, query='', sort=''){
         try{
-            const data = await fs.promises.readFile(this.path, 'utf-8')
-            const products = JSON.parse(data)
-            return products
+            const [code, value] = query.split(':')
+            const parseProducts = await productsModel.paginate({[code]: value}, {
+                limit, 
+                page, 
+                sort: sort ? {price: sort} : {}
+            })
+            parseProducts.payload = parseProducts.docs
+            delete parseProducts.docs
+            return {message: "OK", ...parseProducts}
         } catch (error){
-            return []
+            return {message: "ERROR", rdo: "No hay productos"}
         }
     }
 
@@ -97,5 +109,6 @@ export class ProdManager{
 
     }
 }
+
 
 export default ProdManager

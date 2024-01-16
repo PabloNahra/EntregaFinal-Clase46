@@ -1,20 +1,23 @@
 import { Router } from "express";
 import { productsModel } from "../models/products.model.js"
+import ProdManager from "../dao/ProductManagerMongo.js";
 
 
 const productsRoutes = Router()
 
-
 productsRoutes.get('/', async (req, res) => {
-  console.log('entre al get de productsRoutes')
-  const { category, page } = req.query
-  // const catReq = category
   try {
-    const products = await productsModel.paginate({}, {limit: 2, page: page})
-    console.log("Renderizo")
-    res.send({products})
+    const { limit=10, page=1, query='', sort= ''} = req.query
+    const products = new ProdManager()
+    const resultado = await products.getProducts(limit, page, query, sort)
+
+    if(resultado){
+      res.send(resultado)
+    } else {
+      res.status(400).json(resultado)
+    }
+    
   } catch (error) {
-    console.error(error)
     res.status(400).json({message: `No podemos devolver los productos - ${error}`})
   }
 })

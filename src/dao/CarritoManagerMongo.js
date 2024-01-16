@@ -96,6 +96,27 @@ export class CartManager{
         }
     }
 
+    async addProductsInCart(cId, pId, quantity) {
+        try {
+          const cart = await cartsModel.findOne({_id: cId});
+          if(cart){
+            const existingProducts = cart.products.find(product => product.product.toString() === pId);
+            if(existingProducts){
+              existingProducts.quantity += quantity;
+            }
+            else{
+              cart.products.push({product: pId, quantity});
+            }
+            await cart.save();
+            return true;
+          }
+          else{
+            return false;
+          }
+        } catch (e) {
+          return false;
+        }
+      }
     // Elimino un producto dentro de un carrito
     async deleteProductInCart(cId, pId){
         try {

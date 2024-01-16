@@ -1,8 +1,11 @@
 import { Router } from "express";
 import productsRoutes from "./products.routes.js"
+import ProdManager from "../dao/ProductManagerMongo.js";
 
 
 const viewsRoutes = Router()
+
+const prodManager = new ProdManager()
 
 viewsRoutes.get('/', (req, res) => {
     res.render('index')
@@ -33,27 +36,10 @@ viewsRoutes.get('/products', async (req, res) => {
 
 
 viewsRoutes.get('/products', async (req, res) => {
-    //res.render('products', {products: [{title: "hola"}]})
-    //const productos = {products: [{title: "hola"}]}
-    //console.log(productos)
-    //res.render('products', {products: productos})
-    try {
-      console.log("Entre al try")
-      // Utiliza directamente el método get de productsRoutes
-      const {category, page } = req.query;
-      console.log(category)
-      console.log(page)
-      // const { products } = productsRoutes.get({category, page});
-      let { products } = productsRoutes.get({});
-      console.log("products")
-      console.log(products)
-      // Renderiza la vista 'products' con el objeto products como contexto
-      res.render('products', { products });
-    } catch (error) {
-      // Manejar errores aquí
-      console.error(error);
-      res.status(500).send('Error interno del servidor');
-    }
+  const { page } = req.query
+  const products = await prodManager.getProducts(10, page)
+  res.render('products', products)
+  // res.render('products')
 })
 
 

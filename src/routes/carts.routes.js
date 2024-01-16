@@ -116,12 +116,23 @@ cartsRoutes.delete('/:cId', async (req, res) => {
 })
 
 
-/*
-cartsRoutes.post('/:cid/product/:pid', async (req, res) => {
-    const cartManager = new CartManager('./carts.json');
-    await cartManager.addCartProduct(req.params.cid, req.params.pid)
-    res.status(201).json("Producto agregado correctamente")
+cartsRoutes.post("/:cId/product/:pId",async (req,res)=>{
+
+  try{
+    const {cId, pId} = req.params
+    const newQuantity =  req.body.quantity
+    const carts = new CartManager()
+    const result = await carts.addProductsInCart(cId, pId, newQuantity)
+
+    if (result){
+      return res.status(200).json({message: 'Producto agregado'});
+    }
+    res.status(400).json({message: 'NO se pudo agregar el producto'});
+  }
+  catch(error){
+    res.status(400).send({error});
+  }
 })
-*/
+
 
 export default cartsRoutes

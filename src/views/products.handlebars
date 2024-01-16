@@ -1,9 +1,28 @@
 <div>
-    <h1>Nuestros Productos 1</h1>
+    <h1>Nuestros Productos</h1>
     <br><br><br>
-    <ul>
-        {{#each products}}
-        <li>{{this.title}}</li>
-        {{/each}}
-    </ul>
+    {{#each payload}}
+        <div class="product-item">
+            <p>Id: {{this._id}}</p>
+            <p>Titulo: {{this.title}}</p>
+            <p>Descripcion: {{this.description}}</p>
+            <p>Codigo: {{this.code}}</p>
+            <p>Precio: $ {{this.price}}</p>
+            <p>Disponible: {{this.available}}</p>
+            <p>Stock: {{this.stock}}</p>
+            <p>Categoria: {{this.category}}</p>
+            <button id="{{this._id}}">AGREGAR AL CARRITO</button>
+            <br><br>
+        </div>
+    {{/each}}
 </div>
+
+{{#if hasPrevPage}}
+    <button><a href="/products?page={{prevPage}}">Anterior</a></button>
+{{/if}}
+
+{{#if hasNextPage}}
+    <button><a href="/products?page={{nextPage}}">Siguiente</a></button>
+{{/if}}
+
+<script src="js/products.js"></script>

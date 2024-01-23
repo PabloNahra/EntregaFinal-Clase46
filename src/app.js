@@ -10,6 +10,10 @@ import cartsRoutes from './routes/carts.routes.js'
 import handlebars from 'express-handlebars'
 import viewsRoutes from './routes/views.routes.js'
 import chatsRoutes from './routes/chats.routes.js'
+import sessionRoutes from './routes/session.routes.js'
+
+import session from 'express-session'
+import MongoStore from 'connect-mongo'
 
 const PORT = 8080
 const app = express()
@@ -17,6 +21,19 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(express.static('public'))
+
+// configuracion para la conexion 
+
+app.use(session({
+    secret: "C0d3rh0us3",
+    store: MongoStore.create({
+        mongoUrl: 'mongodb+srv://pablonahra:coder123@cluster0.9wbkiz3.mongodb.net/ecommerce',
+        ttl: 15
+    }),
+    resave: true,
+    saveUninitialized: true
+}))
+
 
 // Configuracion especial por utilizar handlebars con prototipos de mongoose
 const hbs = handlebars.create({
@@ -29,15 +46,18 @@ app.engine('handlebars', hbs.engine)
 app.set('views', 'src/views')
 app.set('view engine', 'handlebars')
 
-
+// conexion para los endpoints
 mongoose.connect('mongodb+srv://pablonahra:coder123@cluster0.9wbkiz3.mongodb.net/ecommerce')
 
+// File System
 app.use('/api/productsfs', productsRoutesFS)
 app.use('/api/cartsfs', cartsRoutesFS)
 
+// MongoDB
 app.use('/api/products', productsRoutes)
 app.use('/api/carts', cartsRoutes)
 app.use('/api/chats', chatsRoutes)
+app.use('/api/session', sessionRoutes)
 
 app.use('/', viewsRoutes)
 

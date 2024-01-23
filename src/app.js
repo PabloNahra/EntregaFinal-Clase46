@@ -27,8 +27,8 @@ app.use(express.static('public'))
 app.use(session({
     secret: "C0d3rh0us3",
     store: MongoStore.create({
-        mongoUrl: 'mongodb+srv://pablonahra:coder123@cluster0.9wbkiz3.mongodb.net/ecommerce',
-        ttl: 15
+        mongoUrl: 'mongodb+srv://pablonahra:coder123@cluster0.9wbkiz3.mongodb.net/ecommerce'
+        // ttl: 15
     }),
     resave: true,
     saveUninitialized: true

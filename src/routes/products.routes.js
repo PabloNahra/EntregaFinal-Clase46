@@ -77,14 +77,4 @@ productsRoutes.put('/:uId', async (req, res) => {
   }
 })
 
-/*
-productsRoutes.put('/:pid', async (req, res) => {
-    const productManager = new ProdManager('./products.json');
-    const product = req.body
-    await productManager.updateProduct(req.params.pid, product)
-    res.status(201).json("Actualizado correctamente")
-})
-
-*/
-
 export default productsRoutes

@@ -5,12 +5,14 @@ const sessionRoutes = Router()
 
 sessionRoutes.post('/register', async (req, res) => {
     const {first_name, last_name, email, age, password} = req.body
+    console.log("Entre a registrar")
     try {
         const user = await userModel.create({
             first_name, last_name, email, age, password
         })
+        console.log(user)
         req.session.user = user
-        res.redirect('/')
+        res.redirect('/products')
     } catch (error) {
         console.error(error)
         res.status(400).send({error})
@@ -19,6 +21,7 @@ sessionRoutes.post('/register', async (req, res) => {
 
 sessionRoutes.post('/login', async(req, res) => {
     const {email, password} = req.body
+    
     try {
         const user = await userModel.findOne({email})
         if(!user){
@@ -27,8 +30,15 @@ sessionRoutes.post('/login', async(req, res) => {
         if(user.password != password){
             return res.status(401).send({message: "Credenciales invalidas"})
         }
+        if(email == "admincoder@coder.com" && password == "adminCod3r123"){
+            console.log("Es ADMIN")
+            const rol = "admin"
+        } else {
+            console.log("Es Usuario")
+            const rol = "usuario"
+        }
         req.session.user = user
-        res.redirect('/')
+        res.redirect('/products')
     } catch (error) {
         res.status(400).send({error})
     }

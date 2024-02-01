@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { userModel } from "../models/user.model.js";
+import { createHash } from "../utils/bcrypt.js";
 
 const sessionRoutes = Router()
 
@@ -8,7 +9,11 @@ sessionRoutes.post('/register', async (req, res) => {
     console.log("Entre a registrar")
     try {
         const user = await userModel.create({
-            first_name, last_name, email, age, password
+            first_name, 
+            last_name, 
+            email, 
+            age, 
+            password: createHash(password)
         })
         console.log(user)
         req.session.user = user

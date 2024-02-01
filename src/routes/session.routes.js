@@ -1,10 +1,13 @@
 import { Router } from "express";
 import { userModel } from "../models/user.model.js";
 import { createHash } from "../utils/bcrypt.js";
+import passport from "passport";
 
 const sessionRoutes = Router()
 
-sessionRoutes.post('/register', async (req, res) => {
+/*
+
+sessionRoutes.post('/register', passport.authenticate('register', {failureRedirect: '/failregister'}),async (req, res) => {
     const {first_name, last_name, email, age, password} = req.body
     console.log("Entre a registrar")
     try {
@@ -22,6 +25,15 @@ sessionRoutes.post('/register', async (req, res) => {
         console.error(error)
         res.status(400).send({error})
     }
+})
+*/
+
+sessionRoutes.post('/register', passport.authenticate('register', {failureRedirect: '/failregister'}), async (req, res) => {
+  res.status(201).send({message: 'Usuario registrado'})
+})
+
+sessionRoutes.get('/failregister', (req, res) => {
+    res.status(400).send({error: 'Falla en el registro'})
 })
 
 sessionRoutes.post('/login', async(req, res) => {

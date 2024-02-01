@@ -8,12 +8,15 @@ import productsRoutes from './routes/products.routes.js'
 import cartsRoutes from './routes/carts.routes.js'
 
 import handlebars from 'express-handlebars'
+import passport from 'passport'
+
 import viewsRoutes from './routes/views.routes.js'
 import chatsRoutes from './routes/chats.routes.js'
 import sessionRoutes from './routes/session.routes.js'
 
 import session from 'express-session'
 import MongoStore from 'connect-mongo'
+import initializePassport from './config/passport.config.js'
 
 const PORT = 8080
 const app = express()
@@ -34,6 +37,11 @@ app.use(session({
     saveUninitialized: true
 }))
 
+
+// Utilización de passport
+initializePassport()
+app.use(passport.initialize())
+app.use(passport.session())
 
 // Configuracion especial por utilizar handlebars con prototipos de mongoose
 const hbs = handlebars.create({

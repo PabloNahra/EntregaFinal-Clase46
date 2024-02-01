@@ -5,63 +5,11 @@ import passport from "passport";
 
 const sessionRoutes = Router()
 
-/*
-
-sessionRoutes.post('/register', passport.authenticate('register', {failureRedirect: '/failregister'}),async (req, res) => {
-    const {first_name, last_name, email, age, password} = req.body
-    console.log("Entre a registrar")
-    try {
-        const user = await userModel.create({
-            first_name, 
-            last_name, 
-            email, 
-            age, 
-            password: createHash(password)
-        })
-        console.log(user)
-        req.session.user = user
-        res.redirect('/products')
-    } catch (error) {
-        console.error(error)
-        res.status(400).send({error})
-    }
-})
-*/
 
 sessionRoutes.post('/register', passport.authenticate('register', {failureRedirect: '/failregister'}), async (req, res) => {
   res.status(201).send({message: 'Usuario registrado'})
 })
 
-sessionRoutes.get('/failregister', (req, res) => {
-    res.status(400).send({error: 'Falla en el registro'})
-})
-
-/*
-sessionRoutes.post('/login', async(req, res) => {
-    const {email, password} = req.body
-    
-    try {
-        const user = await userModel.findOne({email})
-        if(!user){
-            return res.status(404).json({message: "Usuario NO encontrado"})
-        }
-        if(user.password != password){
-            return res.status(401).send({message: "Credenciales invalidas"})
-        }
-        if(email == "admincoder@coder.com" && password == "adminCod3r123"){
-            console.log("Es ADMIN")
-            const rol = "admin"
-        } else {
-            console.log("Es Usuario")
-            const rol = "usuario"
-        }
-        req.session.user = user
-        res.redirect('/products')
-    } catch (error) {
-        res.status(400).send({error})
-    }
-})
-*/
 sessionRoutes.post(
     '/login', 
     passport.authenticate('login', { failureRedirect: '/faillogin'}),
@@ -78,7 +26,6 @@ sessionRoutes.post(
         res.redirect('/')
 })
 
-
 sessionRoutes.post('/logout', async (req, res) => {
     try {
         req.session.destroy((err) => {
@@ -91,5 +38,21 @@ sessionRoutes.post('/logout', async (req, res) => {
         res.status(400).send({error})
     }
 })
+
+sessionRoutes.get(
+    '/github', 
+    passport.authenticate('github', {scope:['user:email']}), 
+    (req, res) => {
+
+})
+
+sessionRoutes.get(
+    '/githubcallback', 
+    passport.authenticate('github', {failureRedirect: '/login'}),
+    (req, res) => {
+        req.session.user = req.user
+        res.redirect('/')
+    }
+)
 
 export default sessionRoutes

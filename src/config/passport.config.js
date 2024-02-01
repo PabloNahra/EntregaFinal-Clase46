@@ -2,6 +2,7 @@ import passport from "passport";
 import local from "passport-local"
 import { userModel } from "../models/user.model.js";
 import { createHash, isValidPassword } from "../utils/bcrypt.js";
+import { Strategy as GithubStrategy} from "passport-github2";
 
 const localStrategy = local.Strategy
 
@@ -44,6 +45,35 @@ const initializePassport = () => {
                 }
                 if(!isValidPassword(user, password)){
                     return done(null, false)
+                }
+                return done(null, user)
+            } catch (error) {
+                return done(error)
+            }
+        }
+    ))
+
+    passport.use('github', new GithubStrategy(
+        {
+            clientID: 'Iv1.71af7d198e9ef810',
+            callbackURL: 'http://localhost:8080/api/session/githubcallback',
+            clientSecret: 'db9060cdceba50c534ddd59a74fad6b0eabdfd1f'
+        },
+        async (accessToken, refreshToken, profile, done) => {
+            try {
+                console.log({profile})
+                const user = await userModel.findOne({email: profile._json.email})
+                if(!user){
+                    const newUser = {
+                        first_name: profile._json.name.split(' ')[0],
+                        last_name: profile._json.name.split(' ')[1],
+                        age: 99,
+                        email: profile._json.email,
+                        //email: profile.username,
+                        password: 'GithubGenerated'
+                    }
+                    const result = await userModel.create(newUser)
+                    return done(null, result)
                 }
                 return done(null, user)
             } catch (error) {

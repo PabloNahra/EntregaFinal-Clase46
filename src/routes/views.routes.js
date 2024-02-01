@@ -48,6 +48,12 @@ viewsRoutes.get('/products', async (req, res) => {
   }
 });
 
+viewsRoutes.get('/faillogin', (req, res) => {
+  res.render('faillogin')
+  //res.status(401).send({message: 'Usuario No autorizado'})
+})
+
+
 
 
 export default viewsRoutes

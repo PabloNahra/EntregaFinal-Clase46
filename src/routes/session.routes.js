@@ -36,6 +36,7 @@ sessionRoutes.get('/failregister', (req, res) => {
     res.status(400).send({error: 'Falla en el registro'})
 })
 
+/*
 sessionRoutes.post('/login', async(req, res) => {
     const {email, password} = req.body
     
@@ -60,6 +61,23 @@ sessionRoutes.post('/login', async(req, res) => {
         res.status(400).send({error})
     }
 })
+*/
+sessionRoutes.post(
+    '/login', 
+    passport.authenticate('login', { failureRedirect: '/faillogin'}),
+    async(req, res) => {
+        if(!req.user){
+            return res.status(400).send({message: 'Error en las credenciales'})
+        }
+        req.session.user = {
+            first_name: req.user.first_name,
+            last_name: req.user.last_name,
+            age: req.user.age,
+            email: req.user.email
+        }
+        res.redirect('/')
+})
+
 
 sessionRoutes.post('/logout', async (req, res) => {
     try {

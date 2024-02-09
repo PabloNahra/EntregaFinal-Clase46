@@ -77,4 +77,11 @@ sessionRoutes.get(
     }
 )
 
+sessionRoutes.get(
+    '/current',
+    (req, res) => {
+        res.send("Usuario actual: " + req.session.user.email)
+    }
+)
+
 export default sessionRoutes

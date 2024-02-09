@@ -1,9 +1,14 @@
-<h1>Login de usuario</h1>
+<h1>INICIO DE SESION</h1>
 
 <form action="/api/session/login" method="post">
-    <label for="">Email: </label> <input type="email" name="email"><br><br>
-    <label for="">Password: </label><input type="password" name="password"><br><br>
+    <label for="">Email: </label> <input type="email" name="email" id="emailInput"><br><br>
+    <label for="">Password: </label><input type="password" name="password" id="passwordInput"><br><br>
     <button type="submit">Iniciar Sesión</button>
     <button type="button"><a href="/api/session/github">Iniciar con GitHub</a></button>
-    <button><a href="/register">Registrarse</a></button>
+    <button><a href="/register">Registrarse</a></button> <br><br>
+    <button type="button" id="restoreBtn">Restaurar Password</button>
 </form>
+
+<h5 id="resultMessage"></h5>
+
+<script src="js/login.js"></script>

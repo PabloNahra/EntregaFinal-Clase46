@@ -8,8 +8,7 @@ const userSchema = mongoose.Schema({
         required: true
     },
     last_name: {
-        type: String,
-        required: true
+        type: String
     },
     email: {
         type: String,
@@ -17,13 +16,21 @@ const userSchema = mongoose.Schema({
         unique: true
     },
     age: {
-        type: Number,
-        required: true
+        type: Number        
     },
     password: {
         type: String,
         required: true
-    }
+    },
+    role: {
+        type: String,
+        default: 'user'
+    },
+    cart: {
+        type: mongoose.Schema.ObjectId,
+        required: false,
+        ref: 'carts'
+    },
 })
 
 export const userModel = mongoose.model(userCollection, userSchema)

@@ -1,24 +1,20 @@
 import express from 'express'
 import mongoose from 'mongoose'
-
 import productsRoutesFS from './routes/productsFS.routes.js'
 import cartsRoutesFS from './routes/cartsFS.routes.js'
-
 import productsRoutes from './routes/products.routes.js'
 import cartsRoutes from './routes/carts.routes.js'
-
 import handlebars from 'express-handlebars'
 import passport from 'passport'
-
 import viewsRoutes from './routes/views.routes.js'
 import chatsRoutes from './routes/chats.routes.js'
 import sessionRoutes from './routes/session.routes.js'
-
 import session from 'express-session'
 import MongoStore from 'connect-mongo'
 import initializePassport from './config/passport.config.js'
+import { PORT, secret } from './config/consts.js'
 
-const PORT = 8080
+
 const app = express()
 
 app.use(express.json())
@@ -28,7 +24,7 @@ app.use(express.static('public'))
 // configuracion para la conexion 
 
 app.use(session({
-    secret: "C0d3rh0us3",
+    secret: secret,
     store: MongoStore.create({
         mongoUrl: 'mongodb+srv://pablonahra:coder123@cluster0.9wbkiz3.mongodb.net/ecommerce'
         // ttl: 15

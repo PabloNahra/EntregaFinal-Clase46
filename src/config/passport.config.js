@@ -25,16 +25,16 @@ const initializePassport = () => {
                     age,
                     password: createHash(password)
                 }
-
                 const result = await userModel.create(newUser)
                 return done(null, result)
             } catch (error) {
-                return done('Error para obtener el usuario' + error)
+                return done('Error para obtener el usuario: ' + error)
             }
         }
     ))
 
     passport.use('login', new localStrategy(
+        //{ passReqToCallback: true, usernameField: 'email' },
         { usernameField: 'email' },
         async (username, password, done) => {
             try {

@@ -8,29 +8,6 @@ export class ProdManager {
         this.path = path;
     }
 
-    /*
-    async getLength() {
-        const products = await this.getProducts()
-        return products.length
-    }
-    */
-
-    /*
-    async getMaxId() {
-        const products = await this.getProducts();
-    
-        if (products.length === 0) {
-            return 0; // Si no hay elementos, devuelve 0 o cualquier valor predeterminado
-        }
-    
-        const maxId = products.reduce((max, product) => {
-            return product.id > max ? product.id : max;
-        }, products[0].id);
-    
-        return maxId;
-    }
-    */
-
     async getProducts(limit=10, page=1, query='', sort=''){
         try{
             const [code, value] = query.split(':')

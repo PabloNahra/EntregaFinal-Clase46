@@ -1,7 +1,3 @@
-/*
-Clase para trabajar sobre el Carrito
-*/
- 
 import fs from 'fs'
 import { cartsModel } from '../models/carts.model.js';
 import mongoose from 'mongoose';

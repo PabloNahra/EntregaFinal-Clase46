@@ -1,6 +1,7 @@
 import ProdManager from "../dao/mongo/ProductManagerMongo.js";
 import { productsModel } from "../models/products.model.js"
 import { Products } from "../dao/factory/factory.js";
+import ProductDTO  from "../dtos/product.dto.js";
 
 const ProductServices = new Products()
 
@@ -35,7 +36,8 @@ export const getProductsById = async (req, res) => {
 
 export const postProduct = async (req, res) => {
     try {
-      const newProduct = req.body
+      //const newProduct = req.body
+      const newProduct = new ProductDTO(req.body)
       const added = await productsModel.create(newProduct)
       res.status(201).json({message: 'Producto añadido'})
     } catch (error) {

@@ -1,7 +1,8 @@
-import ProdManager from "../dao/mongo/ProductManagerMongo.js";
+// import ProdManager from "../dao/mongo/ProductManagerMongo.js";
 import { productsModel } from "../models/products.model.js"
 import { Products } from "../dao/factory/factory.js";
 import ProductDTO  from "../dtos/product.dto.js";
+import { productsServices2 } from "../dao/repositories/index.js";
 
 const ProductServices = new Products()
 
@@ -10,7 +11,8 @@ export const getProducts = async (req, res) => {
       const { limit=10, page=1, query='', sort= ''} = req.query
       // const products = new ProdManager()
       //const resultado = await products.getProducts(limit, page, query, sort)
-      const resultado = await ProductServices.getProducts(limit, page, query, sort)
+      //const resultado = await ProductServices.get(limit, page, query, sort)
+      const resultado = await productsServices2.getProducts2(limit, page, query, sort)
   
       if(resultado){
         res.send(resultado)
@@ -36,15 +38,37 @@ export const getProductsById = async (req, res) => {
 
 export const postProduct = async (req, res) => {
     try {
+      const newProduct = req.body
+      //const newProduct = new ProductDTO(req.body)
+      const resultado = await productsServices2.createProduct2(newProduct)
+
+      if(resultado){
+        res.send(resultado)
+      } else {
+        res.status(400).json(resultado)
+      }
+    } catch (error) {
+      console.error(error)
+      res.status(400).json({message: `No se pudo añadir el producto - ${error}`})
+    }
+}
+
+
+/* Logica en controller
+export const postProduct = async (req, res) => {
+    try {
       //const newProduct = req.body
       const newProduct = new ProductDTO(req.body)
       const added = await productsModel.create(newProduct)
+
+
       res.status(201).json({message: 'Producto añadido'})
     } catch (error) {
       console.error(error)
       res.status(400).json({message: `No se pudo añadir el producto - ${error}`})
     }
 }
+*/
 
 export const deleteProduct = async (req, res) => {
     const { uId } = req.params

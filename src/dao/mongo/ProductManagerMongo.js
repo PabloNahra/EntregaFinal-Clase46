@@ -8,7 +8,7 @@ export class ProdManager {
         this.path = path;
     }
 
-    async getProducts(limit=10, page=1, query='', sort=''){
+    async get(limit=10, page=1, query='', sort=''){
         try{
             const [code, value] = query.split(':')
             const parseProducts = await productsModel.paginate({[code]: value}, {
@@ -25,6 +25,18 @@ export class ProdManager {
     }
 
     async addProduct(product){
+        try {
+            const added = await productsModel.create(product)
+            return {message: 'Producto añadido DAO'}
+        } catch (error) {
+            console.error(error)
+            return {message: `No se pudo añadir el producto DAO - ${error}`}
+        }
+        
+    }
+
+    /* Anterior en FS
+        async addProduct(product){
         if (!product.title || !product.description || !product.code || 
             !product.price 
             || !product.stock == undefined || !product.stock == null 
@@ -52,7 +64,7 @@ export class ProdManager {
 
         await fs.promises.writeFile(this.path, JSON.stringify(products), 'utf-8')
     }
-
+    */
     async getProductById(id){
         const products = await this.getProducts()
         const product = products.find(p => p.id === id)

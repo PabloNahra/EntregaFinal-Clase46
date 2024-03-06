@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { productsModel } from "../models/products.model.js"
+import { productsModel } from "../../models/products.model.js"
 // import mongoosePaginate from 'mongoose-paginate-v2'
 
 

@@ -1,11 +1,15 @@
 import ProdManager from "../dao/mongo/ProductManagerMongo.js";
 import { productsModel } from "../models/products.model.js"
+import { Products } from "../dao/factory/factory.js";
+
+const ProductServices = new Products()
 
 export const getProducts = async (req, res) => {
     try {
       const { limit=10, page=1, query='', sort= ''} = req.query
-      const products = new ProdManager()
-      const resultado = await products.getProducts(limit, page, query, sort)
+      // const products = new ProdManager()
+      //const resultado = await products.getProducts(limit, page, query, sort)
+      const resultado = await ProductServices.getProducts(limit, page, query, sort)
   
       if(resultado){
         res.send(resultado)

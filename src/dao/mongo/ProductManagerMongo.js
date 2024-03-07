@@ -66,37 +66,48 @@ export class ProdManager {
     }
     */
     async getProductById(id){
-        const products = await this.getProducts()
-        const product = products.find(p => p.id === id)
+        const product = await productsModel.findOne({_id: id})
         if (!product){
             return console.error('Prod NO encontrado')
         }
         return product        
     }
 
-    async deleteProduct(id){
+    async deleteProductOLD(id){
         const products = await this.getProducts()
         const productsNotDeleted = products.filter(product => product.id !== id)
         await fs.promises.writeFile(this.path, JSON.stringify(productsNotDeleted), 'utf-8')
     }
 
-    async updateProduct(id, productToUpdate){
-        const products = await this.getProducts()
-        const productId = parseInt(id, 10)
-        const updatedProducts = products.map(product => {
-            if(product.id === productId){
-                return {
-                    ...product,
-                    ...productToUpdate,
-                    id: productId
-                }
+    
+    async deleteProduct(id){
+        try {
+            const productDeleted = await productsModel.deleteOne({_id: id})
+            if(productDeleted.deletedCount > 0){
+              return {message: `Producto eliminado correctamente - Id: ${id}`}
+            } else {
+                return {message: `Producto NO encontrado - Id: ${id}`}
             }
-            return product
-        }) 
+          } catch (error) {
+            console.error(error)
+            return {message: `No se pudo eliminar el producto - ${error}`}
+         }
+        }
 
-    await fs.promises.writeFile(this.path, JSON.stringify(updatedProducts), 'utf-8')
-
+    async updateProduct(id, productToUpdate){
+        try {
+            const update = await productsModel.updateOne({_id: id}, productToUpdate)
+            if(update.modifiedCount > 0) {
+              return {message: `Producto modificado exitosamente - Id: ${id}`}
+            } else {
+              return {message: `Producto NO modificado - Id: ${id}`}
+            }
+          } catch (error) {
+            console.error(error)
+            return {message: `No se pudo modificar el producto - ${error}`}
+          }
     }
+
 }
 
 

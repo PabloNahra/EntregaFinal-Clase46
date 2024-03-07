@@ -4,7 +4,7 @@ import { deleteProduct, getProducts,
     putProduct } from "../controllers/products.controller.js";
 // import { productsModel } from "../models/products.model.js"
 // import ProdManager from "../dao/ProductManagerMongo.js";
-import { productsServices2 } from "../dao/repositories/index.js";
+// import { productsServices2 } from "../dao/repositories/index.js";
 
 
 const productsRoutes = Router()

@@ -6,16 +6,35 @@ export default class ProductRepository {
         this.dao = dao
     }
 
-    getProducts2 = async(limit, page, query, sort) => {
+    getProd = async(limit, page, query, sort) => {
         console.log("getProducts2")
         const result = await this.dao.get(limit, page, query, sort)
         return result
     }
 
-    createProduct2 = async (product) => {
-        console.log("createProducts2")
+    getProdById = async(id) => {
+        console.log("getProductsById - Repository")
+        const result = await this.dao.getProductById(id)
+        return result
+    }
+
+    createProd = async (product) => {
+        console.log("createProducts Repo")
         const newProduct = new ProductDTO(product)
         const result = await this.dao.addProduct(newProduct)
+        return result
+    }
+
+    delProd = async (id) => {
+        console.log("delete Products Repo")
+        const result = await this.dao.deleteProduct(id)
+        return result
+    }
+
+    updateProd = async (id, product) => {
+        console.log("Update Products Repo")
+        const updateProduct = new ProductDTO(product)
+        const result = await this.dao.updateProduct(id, updateProduct)
         return result
     }
 

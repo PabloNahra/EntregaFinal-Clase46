@@ -1,7 +1,9 @@
 import { cartsModel } from "../models/carts.model.js"
 import CartManager from "../dao/mongo/CarritoManagerMongo.js";
+import { cartsServicesRep } from "../dao/repositories/index.js";
 
-export const getCarts = async (req, res) => {
+/*
+export const getCartsOld = async (req, res) => {
     try {
       const carts = await cartsModel.find()
       res.send({carts})
@@ -10,6 +12,21 @@ export const getCarts = async (req, res) => {
       res.status(400).json({message: `No podemos devolver los carritos - ${error}`})
     }
 }
+*/
+
+export const getCarts = async (req, res) => {
+  try {
+    const resultado = await cartsServicesRep.getCartsRep()
+    if(resultado){
+      res.send(resultado)
+    } else {
+      res.status(400).json(resultado)
+    }
+  } catch (error) {
+    res.status(400).json({message: `No podemos devolver los carritos - ${error}`})
+  }
+}
+
 
 export const getCartsById = async (req, res) => {
   try {

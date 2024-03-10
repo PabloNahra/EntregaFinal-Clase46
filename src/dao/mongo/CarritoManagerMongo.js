@@ -10,12 +10,14 @@ export class CartManager{
         this.path = path;
     }
 
-
+/*
     async getLength() {
         const carts = await this.getCarts()
         return carts.length
     }
+    */
 
+    /*
     async getMaxId() {
         const carts = await this.getCarts();
     
@@ -29,15 +31,16 @@ export class CartManager{
     
         return maxId;
     }
+    */
 
-    async getCarts(){
-        try{
-            const data = await fs.promises.readFile(this.path, 'utf-8')
-            const carts = JSON.parse(data)
-            return carts
-        } catch (error){
-            return []
-        }
+    async get(){
+        try {
+            const carts = await cartsModel.find()
+            return {carts}
+          } catch (error) {
+            console.error(error)
+            return {message: `No podemos devolver los carritos - ${error}`}
+          }
     }
 
     async addCart(cart){

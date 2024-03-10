@@ -2,7 +2,7 @@
 import { Command } from 'commander'
 import { getVariables } from '../../config/config.js'
 
-let Products
+export let Products
 
 const program = new Command()
 program.option('--mode <mode>', 'Modo de trabajo', 'production')
@@ -28,4 +28,4 @@ switch (persistence) {
         break;
 }
 
-export default Products
+//export default Products

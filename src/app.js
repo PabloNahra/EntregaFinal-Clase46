@@ -1,7 +1,5 @@
 import express from 'express'
 import mongoose from 'mongoose'
-import productsRoutesFS from './routes/productsFS.routes.js'
-import cartsRoutesFS from './routes/cartsFS.routes.js'
 import productsRoutes from './routes/products.routes.js'
 import cartsRoutes from './routes/carts.routes.js'
 import handlebars from 'express-handlebars'
@@ -13,7 +11,6 @@ import session from 'express-session'
 import MongoStore from 'connect-mongo'
 import initializePassport from './config/passport.config.js'
 import { Command } from 'commander'
-//import { PORT, secret } from './config/consts.js'
 import { secret } from './config/consts.js'
 import { getVariables } from './config/config.js'
 
@@ -66,10 +63,6 @@ app.set('view engine', 'handlebars')
 // conexion para los endpoints
 //mongoose.connect('mongodb+srv://pablonahra:coder123@cluster0.9wbkiz3.mongodb.net/ecommerce')
 mongoose.connect(MONGO_URL)
-
-// File System
-app.use('/api/productsfs', productsRoutesFS)
-app.use('/api/cartsfs', cartsRoutesFS)
 
 // MongoDB
 app.use('/api/products', productsRoutes)

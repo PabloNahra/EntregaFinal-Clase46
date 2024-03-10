@@ -1,10 +1,10 @@
 // import ProdManager from "../dao/mongo/ProductManagerMongo.js";
-import { productsModel } from "../models/products.model.js"
-import { Products } from "../dao/factory/factory.js";
-import ProductDTO  from "../dtos/product.dto.js";
+// import { productsModel } from "../models/products.model.js"
+//import { Products } from "../dao/factory/productFactory.js";
+// import ProductDTO  from "../dtos/product.dto.js";
 import { productsServicesRep } from "../dao/repositories/index.js";
 
-const ProductServices = new Products()
+// const ProductServices = new Products()
 
 export const getProducts = async (req, res) => {
     try {
@@ -74,6 +74,7 @@ export const postProduct = async (req, res) => {
 */
 
 // Delete all
+/*
 export const deleteProduct2 = async (req, res) => {
     const { uId } = req.params
     try {
@@ -87,6 +88,7 @@ export const deleteProduct2 = async (req, res) => {
       res.status(400).json({message: `No se pudo eliminar el producto - ${error}`})
    }
 }
+*/
 
 
 export const deleteProduct = async (req, res) => {
@@ -104,6 +106,7 @@ export const deleteProduct = async (req, res) => {
   }
 }
 
+/*
 export const putProductOld = async (req, res) => {
     const { uId } = req.params
     const productToUpdate = req.body
@@ -120,7 +123,7 @@ export const putProductOld = async (req, res) => {
       res.status(400).json({message: `No se pudo modificar el producto - ${error}`})
     }
   }
-
+*/
 export const putProduct = async (req, res) => {
     const { uId } = req.params
     const productToUpdate = req.body

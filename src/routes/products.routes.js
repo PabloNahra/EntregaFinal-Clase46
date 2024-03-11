@@ -5,7 +5,7 @@ import { deleteProduct, getProducts,
 // import { productsModel } from "../models/products.model.js"
 // import ProdManager from "../dao/ProductManagerMongo.js";
 // import { productsServices2 } from "../dao/repositories/index.js";
-
+import { checkRolAdmin } from "../middlewares/auth.js";
 
 const productsRoutes = Router()
 
@@ -30,11 +30,11 @@ productsRoutes.post('/', (req, res) => {
 })
 */
 // Directo al controller
-productsRoutes.post('/', postProduct)
+productsRoutes.post('/', checkRolAdmin, postProduct)
 
 
-productsRoutes.delete('/:uId', deleteProduct)
+productsRoutes.delete('/:uId', checkRolAdmin, deleteProduct)
 
-productsRoutes.put('/:uId', putProduct)
+productsRoutes.put('/:uId', checkRolAdmin, putProduct)
 
 export default productsRoutes

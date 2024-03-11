@@ -2,7 +2,8 @@ import { Router } from "express";
 import { userModel } from "../models/user.model.js";
 import { createHash } from "../utils/bcrypt.js";
 import passport from "passport";
-import { getSession, getSessionEmail } from "../controllers/sessions.controller.js";
+import { getSessionEmail } from "../controllers/sessions.controller.js";
+import { checkRolAdmin } from "../middlewares/auth.js";
 
 const sessionRoutes = Router()
 
@@ -16,6 +17,7 @@ sessionRoutes.post(
             last_name: req.user.last_name,
             age: req.user.age,
             email: req.user.email,
+            role: req.user.role
         };
         res.redirect('/')
 })
@@ -31,7 +33,8 @@ sessionRoutes.post(
             first_name: req.user.first_name,
             last_name: req.user.last_name,
             age: req.user.age,
-            email: req.user.email
+            email: req.user.email,
+            role: req.user.role
         }
         res.redirect('/')
 })

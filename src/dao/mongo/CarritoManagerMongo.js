@@ -44,25 +44,17 @@ export class CartManager{
     }
 
     async addCart(cart){
-        if (!cart.products) {
-            return console.error('Datos incompletos')   
-            }
-        
-        const id = parseInt(await this.getMaxId(), 10) + 1
-
-        const carts = await this.getCarts()            
-        const newCart = {
-            id: id,
-            products: cart.products
-        }
-        
-        carts.push(newCart)
-
-        await fs.promises.writeFile(this.path, JSON.stringify(carts), 'utf-8')
+        try {
+            const added = await cartsModel.create(cart)
+            res.status(201).json({message: 'Carrito creado exitosamente'})
+          } catch (error) {
+            console.error(error)
+            res.status(400).json({message: `No se pudo crear el carrito - ${error}`})
+          }
     }
 
     async addCartProduct(cartId, productId){
-        console.log(cartId)
+        console.log("AddCat")
         console.log(productId)
         const idCart = parseInt(cartId, 10)
         const idProd = parseInt(productId, 10)
@@ -141,6 +133,7 @@ export class CartManager{
             const cart = await cartsModel.findOne({_id: id}).populate('products.product')
             if (cart){
                 return {message: "OK", rdo: cart.products}
+                //return {message: "OK", rdo: cart.products}
             }
             else {
                 return {message: "ERROR", rdo: "El carrito NO existe o no tiene productos"}
@@ -163,20 +156,36 @@ export class CartManager{
     }
 
     async updateProductInCart(cId, pId, quantity){
+        console.log("updateProductInCart")
+        console.log(cId)
+        console.log(pId)
+        console.log(quantity)
         if(!quantity){
             return false
         }
         try {
             const cart = await cartsModel.findOne({_id: cId})
+            console.log("cart")
+            console.log(cart)
+            console.log("pId")
+            console.log(pId)
+            console.log(typeof pId)
+            console.log("cart.products.._Id")
+            console.log(typeof cart.products._Id)
             if(!cart){
                 return false
             }
-            const product = cart.products.find(product => product.product.toString() == pId)
+            //const product = cart.products.find(product => product._Id.toString === pId)
+            //const product = cart.products.find(product => product._id.equals(mongoose.Types.ObjectId(pId)))
+            const product = cart.products.find(product => product._id.equals(new mongoose.Types.ObjectId(pId)));
+
+            console.log("product")
             console.log(product)
             if(!product){
                 return false
             }
             product.quantity = quantity
+            //await cart.products.save()
             await cart.save()
             return true
         } catch (error) {
@@ -199,9 +208,10 @@ export class CartManager{
         } catch (error) {
             console.error(error)
             return false
-            
         }
     }
+
+    
 
 }
 

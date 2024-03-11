@@ -1,6 +1,6 @@
 class CartProductDTO {
-    constructor(product, quantity) {
-        this.product = product;
+    constructor(productId, quantity) {
+        this.productId = productId;
         this.quantity = quantity;
     }
 }

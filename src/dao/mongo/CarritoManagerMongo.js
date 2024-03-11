@@ -3,6 +3,11 @@ import fs from 'fs'
 //import { cartsModel } from '../src/models/carts.model.js';
 import { cartsModel } from '../../models/carts.model.js'
 import mongoose from 'mongoose';
+//import { getProductsById } from '../../controllers/products.controller.js';
+//import {getProductById} from '..'
+import { ProdManager } from "../mongo/ProductManagerMongo.js"; // Asegúrate de que la ruta sea correcta
+
+const prodManager = new ProdManager(); // Crear una instancia de ProdManager
 
 
 export class CartManager{
@@ -211,8 +216,34 @@ export class CartManager{
         }
     }
 
+    async confirm(cId) {
+        console.log("Mongo confirm")
+        try {
+            console.log("recorrer productos")
+            const prodInCart = await this.getCartById(cId)
+            console.log(prodInCart)
     
-
+            for (const product of prodInCart.rdo) {
+                console.log(product);
+                // Consultar el stock del producto
+                const stockProducto = await prodManager.getProductById(product._id); // Llamar a la función getProductById del ProdManager
+                console.log(stockProducto);
+                console.log(stockProducto.stock);
+                
+                // Si tengo stock sumar a la compra a confirmar
+                // Descontar del stock del producto (ojo con negativos)
+                // El sobrante acumularlo para actualizar el total del carrito
+            }
+    
+            // Confirmar la compra si tenemos alguno producto
+            // Actualizar el carrito con lo restante
+    
+        } catch (error) {
+            console.error(error)
+            return false
+        }
+    }
+    
 }
 
 export default CartManager

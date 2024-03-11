@@ -269,3 +269,17 @@ export const postProductsInCart = async (req,res)=>{
     res.status(400).json({message: `No se pudo agregar el producto - ${error}`})
   }
 }
+
+export const confirmCart = async (req, res) => {
+  try {
+    const {cId} = req.params
+    const resultado = await cartsServicesRep.confCart(cId)
+    if(resultado){
+      res.send(resultado)
+    } else {
+      res.status(400).json(resultado)
+    }
+  } catch (error) {
+    res.status(400).json({message: `No podemos confirmar el carrito - ${error}`})
+  }
+}

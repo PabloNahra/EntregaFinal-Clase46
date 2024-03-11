@@ -4,7 +4,7 @@ import CartManager from "../dao/mongo/CarritoManagerMongo.js";
 import { getCarts, getCartsById, 
   postCart,deleteCartById, 
   putCartById, putProductsInCart, 
-  deleteProductsInCart, postProductsInCart } from "../controllers/carts.controller.js";
+  deleteProductsInCart, postProductsInCart, confirmCart } from "../controllers/carts.controller.js";
 // import CartManager from "../dao/CarritoManagerFS.js";
 import { checkRolUser } from "../middlewares/auth.js";
 
@@ -28,6 +28,9 @@ cartsRoutes.delete('/:cId', deleteProductsInCart)
 
 
 cartsRoutes.post("/:cId/product/:pId",  checkRolUser, postProductsInCart)
+
+// Finalizar el proceso de compra
+cartsRoutes.post('/:cId/purchase',  confirmCart)
 
 
 export default cartsRoutes

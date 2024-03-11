@@ -5,8 +5,8 @@ import { checkAuth, checkExistingUser } from "../middlewares/auth.js";
 
 
 const viewsRoutes = Router()
-
 const prodManager = new ProdManager()
+
 
 viewsRoutes.get('/', checkAuth, (req, res) => {
   const { user } = req.session

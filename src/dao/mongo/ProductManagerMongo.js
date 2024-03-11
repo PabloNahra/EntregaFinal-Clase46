@@ -1,4 +1,4 @@
-import fs from 'fs'
+//import fs from 'fs'
 import { productsModel } from "../../models/products.model.js"
 // import mongoosePaginate from 'mongoose-paginate-v2'
 
@@ -73,11 +73,13 @@ export class ProdManager {
         return product        
     }
 
+    /*
     async deleteProductOLD(id){
         const products = await this.getProducts()
         const productsNotDeleted = products.filter(product => product.id !== id)
         await fs.promises.writeFile(this.path, JSON.stringify(productsNotDeleted), 'utf-8')
     }
+    */
 
     
     async deleteProduct(id){

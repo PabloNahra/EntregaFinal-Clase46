@@ -2,9 +2,9 @@ import { Router } from "express";
 import { userModel } from "../models/user.model.js";
 import { createHash } from "../utils/bcrypt.js";
 import passport from "passport";
+import { getSession, getSessionEmail } from "../controllers/sessions.controller.js";
 
 const sessionRoutes = Router()
-
 
 sessionRoutes.post(
     '/register', 
@@ -77,11 +77,7 @@ sessionRoutes.get(
     }
 )
 
-sessionRoutes.get(
-    '/current',
-    (req, res) => {
-        res.send("Usuario actual: " + req.session.user.email)
-    }
-)
+
+sessionRoutes.get('/current', getSessionEmail)
 
 export default sessionRoutes

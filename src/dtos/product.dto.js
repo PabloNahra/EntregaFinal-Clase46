@@ -5,7 +5,7 @@ class ProductDTO {
         this.code = product.code
         this.price = product.price
         this.available = product.available
-        this.stock = 2000
+        this.stock = product.stock
         this.category = product.category
         this.thumbnail = product.thumbnail
     }

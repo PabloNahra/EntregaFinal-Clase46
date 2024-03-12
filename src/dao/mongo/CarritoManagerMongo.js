@@ -49,12 +49,14 @@ export class CartManager{
     }
 
     async addCart(cart){
+        console.log("addCart en Carrito Manager")
         try {
             const added = await cartsModel.create(cart)
-            res.status(201).json({message: 'Carrito creado exitosamente'})
+            console.log(added)
+            return {message: 'Carrito creado exitosamente'}
           } catch (error) {
             console.error(error)
-            res.status(400).json({message: `No se pudo crear el carrito - ${error}`})
+            return {message: `No se pudo crear el carrito - ${error}`}
           }
     }
 
@@ -160,8 +162,8 @@ export class CartManager{
          }
     }
 
-    async updateProductInCart(cId, pId, quantity){
-        console.log("updateProductInCart")
+    async updateProductInCartOld(cId, pId, quantity){
+        console.log("updateProductInCart - Carrito Manager")
         console.log(cId)
         console.log(pId)
         console.log(quantity)
@@ -175,16 +177,18 @@ export class CartManager{
             console.log("pId")
             console.log(pId)
             console.log(typeof pId)
-            console.log("cart.products.._Id")
-            console.log(typeof cart.products._Id)
+            console.log("cart.products[0]._id")
+            //console.log(typeof cart.products._Id)
+            console.log(cart.products[0]._id)
             if(!cart){
                 return false
             }
             //const product = cart.products.find(product => product._Id.toString === pId)
             //const product = cart.products.find(product => product._id.equals(mongoose.Types.ObjectId(pId)))
+            /*
             const product = cart.products.find(product => product._id.equals(new mongoose.Types.ObjectId(pId)));
 
-            console.log("product")
+            console.log("product de la constante")
             console.log(product)
             if(!product){
                 return false
@@ -193,12 +197,65 @@ export class CartManager{
             //await cart.products.save()
             await cart.save()
             return true
+            */
+            const productIndex = cart.products.findIndex(product => product.product.equals(new mongoose.Types.ObjectId(pId)));
+
+            if (productIndex !== -1) {
+                cart.products[productIndex].quantity = quantity;
+                await cart.save();
+                return true;
+            } else {
+                return false; // Producto no encontrado en el carrito
+            }
+            
         } catch (error) {
             console.error(error)
             return false
         }
     }
 
+
+    async updateProductInCart(cId, pId, quantity) {
+        if (!quantity) {
+            return false;
+        }
+    
+        try {
+            const cart = await cartsModel.findOne({ _id: cId });
+            if (!cart) {
+                return false;
+            }
+    
+            const pIdObject = new mongoose.Types.ObjectId(pId);
+            let productIndex = -1;
+
+            console.log(pIdObject)
+            console.log(cart.products)
+    
+            cart.products.forEach((product, index) => {
+                if (product.product.equals(pIdObject)) {
+                    console.log("coincide pId")
+                    productIndex = index;
+                    console.log("productIndex:", productIndex);
+                }
+            });
+
+            if (productIndex !== -1) {
+                cart.products[productIndex].quantity = quantity;
+                console.log("cart a salvar")
+                console.log(cart)
+                await cart.save();
+                return true;
+            } else {
+                return false; // Producto no encontrado en el carrito
+            }
+        } catch (error) {
+            console.error(error);
+            return false;
+        }
+    }
+    
+    
     async deleteAllProductsInCart (id){
         try {
             const deleted = await cartsModel.updateOne({_id: id}, {
@@ -218,12 +275,16 @@ export class CartManager{
 
     async confirm(cId) {
         console.log("Mongo confirm")
+        const compraConfirmada = []
         try {
             console.log("recorrer productos")
             const prodInCart = await this.getCartById(cId)
             console.log(prodInCart)
+            const newCart = prodInCart
     
             for (const product of prodInCart.rdo) {
+                let quantityConfirm = 0
+
                 console.log(product);
                 // Consultar el stock del producto
                 const stockProducto = await prodManager.getProductById(product._id); // Llamar a la función getProductById del ProdManager
@@ -231,7 +292,26 @@ export class CartManager{
                 console.log(stockProducto.stock);
                 
                 // Si tengo stock sumar a la compra a confirmar
-                // Descontar del stock del producto (ojo con negativos)
+                if (product.quantity <= stockProducto.stock) {
+                    console.log("Hay stock para todo lo comprado");
+                    quantityConfirm = product.quantity;
+                } else if (stockProducto.stock > 0) {
+                    console.log("Hay stock para un parcial de lo comprado");
+                    quantityConfirm = stockProducto.stock;
+                } else {
+                    console.log("No hay stock");
+                    quantityConfirm = 0;
+                }
+                
+                // Descontar del stock del producto (ojo con negativos) y del carrito
+                if (quantityConfirm != 0){
+                    const stock = stockProducto.stock - quantityConfirm
+                    console.log("stock")
+                    console.log(stock)
+                    const productUpdateStock = {stock}
+                    prodManager.updateProduct(product._id, productUpdateStock)
+                }
+
                 // El sobrante acumularlo para actualizar el total del carrito
             }
     

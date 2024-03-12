@@ -1,3 +1,4 @@
+
 class CartProductDTO {
     constructor(productId, quantity) {
         this.productId = productId;
@@ -8,7 +9,7 @@ class CartProductDTO {
 class CartDTO {
     constructor(cart) {
         // Mapea los productos del carrito al DTO de productos
-        this.products = cart.products.map(({ product, quantity }) => new CartProductDTO(product, quantity));
+        this.products = cart.products.map(({ productId, quantity }) => new CartProductDTO(productId, quantity));
     }
 }
 

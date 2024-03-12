@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import mongoosePaginate from 'mongoose-paginate-v2'
-import crypto from 'crypto'
 
 const ticketsCollection = 'tickets'
 

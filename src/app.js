@@ -13,6 +13,7 @@ import initializePassport from './config/passport.config.js'
 import { Command } from 'commander'
 import { secret } from './config/consts.js'
 import { getVariables } from './config/config.js'
+import ticketsRoutes from './routes/tickets.routes.js'
 
 
 const app = express()
@@ -69,6 +70,7 @@ app.use('/api/products', productsRoutes)
 app.use('/api/carts', cartsRoutes)
 app.use('/api/chats', chatsRoutes)
 app.use('/api/session', sessionRoutes)
+app.use('/api/tickets', ticketsRoutes)
 
 app.use('/', viewsRoutes)
 

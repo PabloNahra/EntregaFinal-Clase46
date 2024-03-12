@@ -40,7 +40,8 @@ export default class CartRepository {
 
    putCartByIdRep = async (id, cart) => {
     console.log("Update carts Repo")
-    const updateCart = new CartDTO(cart)
+    const updateCart = cart
+    //const updateCart = new CartDTO(cart)
     const result = await this.dao.updateCart(id, updateCart)
     return result
     }

@@ -8,40 +8,28 @@ export default class CartRepository {
     }
 
     getCartsRep = async() => {
-        console.log("getCarts - Repository")
         const result = await this.dao.get()
         return result
     }
 
     getCartByIdRep = async(id) => {
-        console.log("getCartById - Repository")
         const result = await this.dao.getCartById(id)
         return result
     }
 
     createCartRep = async (cart) => {
-        console.log("create Carts Repo")
-        console.log(cart)
         const newCart = cart //new CartDTO(cart)
-        //const newCart = new CartDTO(cart)
-        console.log("newCart")
-        console.log(newCart)
         const result = await this.dao.addCart(newCart)
-        console.log("result")
-        console.log(result)
         return result
     }
 
     delCart = async (id) => {
-        console.log("Carts Repo")
         const result = await this.dao.deleteAllProductsInCart(id)
         return result
    }
 
    putCartByIdRep = async (id, cart) => {
-    console.log("Update carts Repo")
     const updateCart = cart
-    //const updateCart = new CartDTO(cart)
     const result = await this.dao.updateCart(id, updateCart)
     return result
     }
@@ -53,9 +41,7 @@ export default class CartRepository {
 
     
     putProdInCartRep = async(cId, pId, quantity) => {
-        console.log("Agregar producto en carrito")
         const result = await this.dao.addProductsInCart(cId, pId, quantity)
-
         return result
         }
     

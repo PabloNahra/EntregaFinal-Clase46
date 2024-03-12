@@ -11,7 +11,6 @@ sessionRoutes.post(
     '/register', 
     passport.authenticate('register', {failureRedirect: '/failregister'}), 
     async (req, res) => {
-        //res.status(201).send({message: 'Usuario registrado'})
         req.session.user = {
             first_name: req.user.first_name,
             last_name: req.user.last_name,
@@ -79,7 +78,6 @@ sessionRoutes.get(
         res.redirect('/')
     }
 )
-
 
 sessionRoutes.get('/current', getSessionEmail)
 

@@ -18,25 +18,20 @@ import ticketsRoutes from './routes/tickets.routes.js'
 
 const app = express()
 
-// Entornos - Clase 25 - 8/02 (0013)
+// Entornos
 const program = new Command()
 program.option('--mode <mode>', 'Modo de trabajo', 'production')
 const options = program.parse()
 const { PORT, MONGO_URL } = getVariables(options)
-
-console.log(PORT)
-console.log(MONGO_URL)
 
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(express.static('public'))
 
 // configuracion para la conexion 
-
 app.use(session({
     secret: secret,
     store: MongoStore.create({
-        //mongoUrl: 'mongodb+srv://pablonahra:coder123@cluster0.9wbkiz3.mongodb.net/ecommerce'
         mongoUrl: MONGO_URL
         // ttl: 15
     }),
@@ -62,7 +57,6 @@ app.set('views', 'src/views')
 app.set('view engine', 'handlebars')
 
 // conexion para los endpoints
-//mongoose.connect('mongodb+srv://pablonahra:coder123@cluster0.9wbkiz3.mongodb.net/ecommerce')
 mongoose.connect(MONGO_URL)
 
 // MongoDB

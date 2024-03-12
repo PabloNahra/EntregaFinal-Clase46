@@ -3,7 +3,6 @@ import { ticketsServicesRep } from "../dao/repositories/index.js";
 
 export const getTickets = async (req, res) => {
   try {
-    //const resultado = await cartsServicesRep.getCartsRep()
     const resultado = await ticketsServicesRep.getTk()
     if(resultado){
       res.send(resultado)

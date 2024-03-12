@@ -1,4 +1,3 @@
-// import config from "../../config/config.js"
 import { Command } from 'commander'
 import { getVariables } from '../../config/config.js'
 
@@ -19,4 +18,3 @@ switch (persistence) {
     default:
         break;
 }
-

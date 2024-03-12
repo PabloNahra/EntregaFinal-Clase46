@@ -27,44 +27,14 @@ export class ProdManager {
     async addProduct(product){
         try {
             const added = await productsModel.create(product)
-            return {message: 'Producto añadido DAO'}
+            if (added) {
+                return {message: 'Producto añadido DAO'}
+            }
         } catch (error) {
-            console.error(error)
             return {message: `No se pudo añadir el producto DAO - ${error}`}
         }
-        
     }
 
-    /* Anterior en FS
-        async addProduct(product){
-        if (!product.title || !product.description || !product.code || 
-            !product.price 
-            || !product.stock == undefined || !product.stock == null 
-            || !product.category) {
-            return console.error('Datos incompletos')   
-            }
-        
-        const available = product.available ?? 1;
-        const id = parseInt(await this.getMaxId(), 10) + 1
-
-        const products = await this.getProducts()            
-        const newProduct = {
-            id: id,
-            title: product.title,
-            description: product.description,
-            code: product.code,
-            price: product.price,
-            available: available,
-            stock: product.stock,
-            category: product.category,
-            thumbnail: product.thumbnail
-        }
-        
-        products.push(newProduct)
-
-        await fs.promises.writeFile(this.path, JSON.stringify(products), 'utf-8')
-    }
-    */
     async getProductById(id){
         const product = await productsModel.findOne({_id: id})
         if (!product){
@@ -73,15 +43,6 @@ export class ProdManager {
         return product        
     }
 
-    /*
-    async deleteProductOLD(id){
-        const products = await this.getProducts()
-        const productsNotDeleted = products.filter(product => product.id !== id)
-        await fs.promises.writeFile(this.path, JSON.stringify(productsNotDeleted), 'utf-8')
-    }
-    */
-
-    
     async deleteProduct(id){
         try {
             const productDeleted = await productsModel.deleteOne({_id: id})
@@ -98,9 +59,6 @@ export class ProdManager {
 
     async updateProduct(id, productToUpdate){
         try {
-            console.log("dento del updateProduct")
-            console.log(id)
-            console.log(productToUpdate)
             const update = await productsModel.updateOne({_id: id}, productToUpdate)
             if(update.modifiedCount > 0) {
               return {message: `Producto modificado exitosamente - Id: ${id}`}
@@ -112,7 +70,6 @@ export class ProdManager {
             return {message: `No se pudo modificar el producto - ${error}`}
           }
     }
-
 }
 
 

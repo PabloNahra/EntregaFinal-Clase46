@@ -1,5 +1,4 @@
 import { Router } from "express";
-import productsRoutes from "./products.routes.js"
 import ProdManager from "../dao/mongo/ProductManagerMongo.js";
 import { checkAuth, checkExistingUser } from "../middlewares/auth.js";
 

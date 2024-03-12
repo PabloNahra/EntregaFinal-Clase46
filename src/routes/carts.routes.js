@@ -1,11 +1,8 @@
 import { Router } from "express";
-import { cartsModel } from "../models/carts.model.js"
-import CartManager from "../dao/mongo/CarritoManagerMongo.js";
 import { getCarts, getCartsById, 
   postCart,deleteCartById, 
   putCartById, putProductsInCart, 
   deleteProductsInCart, postProductsInCart, confirmCart } from "../controllers/carts.controller.js";
-// import CartManager from "../dao/CarritoManagerFS.js";
 import { checkRolUser } from "../middlewares/auth.js";
 
 const cartsRoutes = Router()

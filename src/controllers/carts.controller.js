@@ -272,8 +272,9 @@ export const postProductsInCart = async (req,res)=>{
 
 export const confirmCart = async (req, res) => {
   try {
+    const user = req.session.user
     const {cId} = req.params
-    const resultado = await cartsServicesRep.confCart(cId)
+    const resultado = await cartsServicesRep.confCart(cId, user)
     if(resultado){
       res.send(resultado)
     } else {

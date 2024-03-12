@@ -127,7 +127,7 @@ export const putProductOld = async (req, res) => {
 export const putProduct = async (req, res) => {
     const { uId } = req.params
     const productToUpdate = req.body
-    console.log("productToUpdate")
+    console.log("productToUpdate - Controller")
     console.log(productToUpdate)
     try {
       const resultado = await productsServicesRep.updateProd(uId, productToUpdate)

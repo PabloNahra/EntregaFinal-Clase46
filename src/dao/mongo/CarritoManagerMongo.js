@@ -6,6 +6,8 @@ import mongoose from 'mongoose';
 //import { getProductsById } from '../../controllers/products.controller.js';
 //import {getProductById} from '..'
 import { ProdManager } from "../mongo/ProductManagerMongo.js"; // Asegúrate de que la ruta sea correcta
+import ProductDTO from "../../dtos/product.dto.js";
+
 
 const prodManager = new ProdManager(); // Crear una instancia de ProdManager
 
@@ -275,41 +277,68 @@ export class CartManager{
 
     async confirm(cId) {
         console.log("Mongo confirm")
-        const compraConfirmada = []
+        // const compraConfirmada = []
         try {
             console.log("recorrer productos")
             const prodInCart = await this.getCartById(cId)
             console.log(prodInCart)
             const newCart = prodInCart
+
+            console.log(prodInCart.rdo)
     
-            for (const product of prodInCart.rdo) {
+            // for (const product of prodInCart.rdo) {
+            for (const prod of prodInCart.rdo) {
                 let quantityConfirm = 0
 
-                console.log(product);
+                console.log(prod);
                 // Consultar el stock del producto
-                const stockProducto = await prodManager.getProductById(product._id); // Llamar a la función getProductById del ProdManager
-                console.log(stockProducto);
-                console.log(stockProducto.stock);
+                console.log("prod._id")
+                console.log(prod._id)
+                console.log("prod.product._id")
+                console.log(prod.product._id)
+                //const stockProducto = await prodManager.getProductById(product._id); // Llamar a la función getProductById del ProdManager
+                //console.log(stockProducto);
+                //console.log(stockProducto.stock);
+                //const stockProducto = product.stock
+                const stockProducto = prod.product.stock
                 
                 // Si tengo stock sumar a la compra a confirmar
-                if (product.quantity <= stockProducto.stock) {
+                if (prod.quantity <= stockProducto) {
                     console.log("Hay stock para todo lo comprado");
-                    quantityConfirm = product.quantity;
-                } else if (stockProducto.stock > 0) {
+                    quantityConfirm = prod.quantity;
+                    console.log(quantityConfirm)
+                } else if (stockProducto > 0) {
                     console.log("Hay stock para un parcial de lo comprado");
-                    quantityConfirm = stockProducto.stock;
+                    quantityConfirm = stockProducto;
+                    console.log(quantityConfirm)
                 } else {
                     console.log("No hay stock");
                     quantityConfirm = 0;
+                    console.log(quantityConfirm)
                 }
                 
                 // Descontar del stock del producto (ojo con negativos) y del carrito
+                console.log("antes del if")
                 if (quantityConfirm != 0){
-                    const stock = stockProducto.stock - quantityConfirm
+                    let stock = stockProducto - quantityConfirm
                     console.log("stock")
                     console.log(stock)
-                    const productUpdateStock = {stock}
-                    prodManager.updateProduct(product._id, productUpdateStock)
+                    let productUpdateStock = { stock: stock }
+                    console.log("productUpdateStock")
+                    console.log(productUpdateStock)
+                    let updateProduct = new ProductDTO(productUpdateStock)
+                    let result = await prodManager.updateProduct(prod.product._id.toString(), updateProduct)
+                    console.log(result)
+
+                    let stockInCartRestante = prod.quantity - quantityConfirm
+                    console.log(stockInCartRestante)
+
+                    if(stockInCartRestante === 0){
+                        console.log("eliminar el producto del carrito")
+                    } else if (stockInCartRestante > 0) {
+                        console.log("Actualizar cantidad en carrito")
+                        this.updateProductInCart(cId, pId, stockInCartRestante)
+                    }
                 }
 
                 // El sobrante acumularlo para actualizar el total del carrito

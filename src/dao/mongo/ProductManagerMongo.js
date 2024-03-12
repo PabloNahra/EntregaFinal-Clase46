@@ -98,6 +98,9 @@ export class ProdManager {
 
     async updateProduct(id, productToUpdate){
         try {
+            console.log("dento del updateProduct")
+            console.log(id)
+            console.log(productToUpdate)
             const update = await productsModel.updateOne({_id: id}, productToUpdate)
             if(update.modifiedCount > 0) {
               return {message: `Producto modificado exitosamente - Id: ${id}`}

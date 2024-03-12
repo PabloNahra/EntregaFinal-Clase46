@@ -27,7 +27,6 @@ export const checkLogin = async (req, res, next) => {
 }
 
 export const checkRolAdmin = (req, res, next) => {
-    console.log(req.session.user)
     if(req.session.user.role === "admin"){
         next()
     } else {
@@ -36,7 +35,6 @@ export const checkRolAdmin = (req, res, next) => {
 }
 
 export const checkRolUser = (req, res, next) => {
-    console.log(req.session.user)
     if(req.session.user.role === "user"){
         next()
     } else {

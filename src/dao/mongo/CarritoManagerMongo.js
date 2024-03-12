@@ -193,6 +193,7 @@ export class CartManager {
       const newCart = prodInCart;
       let montoCompra = 0;
       let quantityTotal = 0;
+      const prodSinStock = []; 
 
       for (const prod of prodInCart.rdo) {
         let quantityConfirm = 0;
@@ -201,20 +202,21 @@ export class CartManager {
         const stockProducto = prod.product.stock;
 
         // Si tengo stock sumar a la compra a confirmar
+        // Puedo completar el total de las unidades del producto
         if (prod.quantity <= stockProducto) {
           quantityConfirm = prod.quantity;
-          console.log(quantityConfirm);
-          console.log(prod.product.price);
+
           quantityTotal += quantityConfirm;
           montoCompra += quantityConfirm * prod.product.price;
+        // Puedo entregar un parcial de las unidades del producto
         } else if (stockProducto > 0) {
           quantityConfirm = stockProducto;
-          console.log(quantityConfirm);
-          console.log(prod.product.price);
           quantityTotal += quantityConfirm;
           montoCompra += quantityConfirm * prod.product.price;
+          prodSinStock.push(prod.product._id)
         } else {
           quantityConfirm = 0;
+          prodSinStock.push(prod.product._id)
         }
 
         // Descontar del stock del producto (ojo con negativos) y del carrito
@@ -232,15 +234,18 @@ export class CartManager {
           let stockInCartRestante = prod.quantity - quantityConfirm;
 
           // Actualizo carrito
+          // Si complete la entrega del producto (todas las unidades)
           if (stockInCartRestante === 0) {
             this.deleteProductInCart(cId, prod.product._id.toString());
-          } else if (stockInCartRestante > 0) {
+          } 
+          // Si complete la entrega del producto parcialmente (algunas unidades)
+          else if (stockInCartRestante > 0) {
             this.updateProductInCart(
               cId,
               prod.product._id.toString(),
               stockInCartRestante
             );
-          }
+          } 
         }
       }
 
@@ -254,11 +259,16 @@ export class CartManager {
         let tkNew = new TicketDTO(tk);
         const tkresult = await tkManager.addTk(tkNew);
         return tkresult;
+      } else if (prodSinStock != 0){
+        // Devolver el arreglo con los productos que no se pudieron entregar
+        return {message: `No se pudieron entregar estos producto  - IDs: ${prodSinStock}`}
       } else {
         return {
-          message: "El carrito no tiene productos con stock para confirmarlo",
+          message: `No se pudo entregar ningun producto - ${prodSinStock}`,
         };
       }
+
+
     } catch (error) {
       console.error(error);
       return false;

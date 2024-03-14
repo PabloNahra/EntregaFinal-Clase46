@@ -3,15 +3,33 @@ import local from "passport-local"
 import { userModel } from "../models/user.model.js";
 import { createHash, isValidPassword } from "../utils/bcrypt.js";
 import { Strategy as GithubStrategy} from "passport-github2";
+import CustomErrors from '../services/errors/CustomError.js'
+import ErrorEnum from "../services/errors/error.enum.js";
+import { generateUserErrorInfo } from "../services/errors/info.js";
+
 
 const localStrategy = local.Strategy
 
 // Colocamos cada una de las estrategias
 const initializePassport = () => {
+    console.log("initializePassport")
     passport.use('register', new localStrategy(
         { passReqToCallback: true, usernameField: 'email'},
         async (req, username, password, done) => {
             const { first_name, last_name, email, age, role} = req.body
+            const userReg = req.body
+
+            
+            // Incorporo control de errores
+            if (!first_name || !last_name || !email || !age) {
+                CustomErrors.createError({
+                    name: "Fallo en la creación de usuario",
+                    cause: generateUserErrorInfo(userReg),
+                    message: "Error al intentar crear el usuario",
+                    code: ErrorEnum.INVALID_TYPE_ERROR
+                })}
+            
+
             try {
                 const user = await userModel.findOne({email: username})
                 if(user){

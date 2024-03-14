@@ -27,3 +27,6 @@ export const getSession = async (req, res) => {
       res.status(400).json({message: `No podemos devolver el EMAIL de la session - ${error}`})
     }
   }
+
+
+

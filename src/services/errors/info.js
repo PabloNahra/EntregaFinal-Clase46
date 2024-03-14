@@ -1,3 +1,4 @@
+// Generar usuarios
 export const generateUserErrorInfo = (user) => {
     return `One or more properties are incomplete or invalid
         first_name = needs to be a string, received ${typeof user.first_name}
@@ -8,6 +9,7 @@ export const generateUserErrorInfo = (user) => {
 }
 
 
+// Generar productos
 export const generateProductErrorInfo = (product) => {
     return `One or more properties are incomplete or invalid
         title = needs to be a string, received ${typeof product.title}

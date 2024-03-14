@@ -14,6 +14,7 @@ import { Command } from 'commander'
 import { secret } from './config/consts.js'
 import { getVariables } from './config/config.js'
 import ticketsRoutes from './routes/tickets.routes.js'
+import { errorHandler } from './middlewares/error.js'
 
 
 const app = express()
@@ -65,8 +66,10 @@ app.use('/api/carts', cartsRoutes)
 app.use('/api/chats', chatsRoutes)
 app.use('/api/session', sessionRoutes)
 app.use('/api/tickets', ticketsRoutes)
-
 app.use('/', viewsRoutes)
+
+// Manejo de errores
+app.use(errorHandler)
 
 app.listen(PORT, () => {
     console.log(`Escuchando en el puerto ${PORT}`)

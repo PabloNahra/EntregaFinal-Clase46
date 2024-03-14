@@ -1,4 +1,7 @@
 import { productsServicesRep } from "../dao/repositories/index.js";
+import CustomErrors from '../services/errors/CustomError.js'
+import ErrorEnum from "../services/errors/error.enum.js";
+import { generateProductErrorInfo } from "../services/errors/info.js";
 
 export const getProducts = async (req, res) => {
     try {
@@ -32,6 +35,20 @@ export const getProductsById = async (req, res) => {
 export const postProduct = async (req, res) => {
     try {
       const newProduct = req.body
+
+      if (!newProduct.title || !newProduct.description 
+        || !newProduct.code 
+        || !newProduct.price 
+        || !newProduct.stock == undefined || !newProduct.stock == null 
+        || !newProduct.category 
+        || !newProduct.thumbnail) {
+          CustomErrors.createError({
+            name: "Fallo en la creación de producto",
+            cause: generateProductErrorInfo(newProduct),
+            message: "Error al intentar crear el producto",
+            code: ErrorEnum.INVALID_TYPE_ERROR
+          })
+        }
       const resultado = await productsServicesRep.createProd(newProduct)
       if(resultado){
         res.send(resultado)

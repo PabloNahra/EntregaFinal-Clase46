@@ -1,11 +1,13 @@
 import express from 'express'
 import mongoose from 'mongoose'
+import mockRoutes from './routes/mock.routes.js'
 import productsRoutes from './routes/products.routes.js'
 import cartsRoutes from './routes/carts.routes.js'
+import ticketsRoutes from './routes/tickets.routes.js'
+import chatsRoutes from './routes/chats.routes.js'
+import viewsRoutes from './routes/views.routes.js'
 import handlebars from 'express-handlebars'
 import passport from 'passport'
-import viewsRoutes from './routes/views.routes.js'
-import chatsRoutes from './routes/chats.routes.js'
 import sessionRoutes from './routes/session.routes.js'
 import session from 'express-session'
 import MongoStore from 'connect-mongo'
@@ -13,7 +15,6 @@ import initializePassport from './config/passport.config.js'
 import { Command } from 'commander'
 import { secret } from './config/consts.js'
 import { getVariables } from './config/config.js'
-import ticketsRoutes from './routes/tickets.routes.js'
 import { errorHandler } from './middlewares/error.js'
 
 
@@ -59,6 +60,9 @@ app.set('view engine', 'handlebars')
 
 // conexion para los endpoints
 mongoose.connect(MONGO_URL)
+
+// Servicio Mocking
+app.use('/api/mocks', mockRoutes)
 
 // MongoDB
 app.use('/api/products', productsRoutes)

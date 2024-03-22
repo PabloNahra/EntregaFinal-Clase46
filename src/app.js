@@ -70,12 +70,12 @@ app.use(addLogger)
 
 // Prueba de Logger
 app.get('/loggerTest', (req, res) => {
-    req.logger.silly('Este es un log de SILLY')
+    //req.logger.silly('Este es un log de SILLY')
     req.logger.info('Este es un log de INFO')
-    req.logger.verbose('Este es un log de VERBOSE')
-    req.logger.warn('Este es un log de WARNING')
+    //req.logger.verbose('Este es un log de VERBOSE')
+    req.logger.warning('Este es un log de WARNING')
     req.logger.error('Este es un log de ERROR')
-    res.send({message: 'Error de prueba de Logger'})
+    res.send({message: 'Prueba de Logger'})
 })
 
 // MongoDB

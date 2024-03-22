@@ -16,6 +16,7 @@ import { Command } from 'commander'
 import { secret } from './config/consts.js'
 import { getVariables } from './config/config.js'
 import { errorHandler } from './middlewares/error.js'
+import { addLogger } from './utils/logger.js'
 
 
 const app = express()
@@ -63,6 +64,19 @@ mongoose.connect(MONGO_URL)
 
 // Servicio Mocking
 app.use('/api/mocks', mockRoutes)
+
+//Logger
+app.use(addLogger)
+
+// Prueba de Logger
+app.get('/loggerTest', (req, res) => {
+    req.logger.silly('Este es un log de SILLY')
+    req.logger.info('Este es un log de INFO')
+    req.logger.verbose('Este es un log de VERBOSE')
+    req.logger.warn('Este es un log de WARNING')
+    req.logger.error('Este es un log de ERROR')
+    res.send({message: 'Error de prueba de Logger'})
+})
 
 // MongoDB
 app.use('/api/products', productsRoutes)

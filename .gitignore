@@ -6,3 +6,9 @@ pruebas.js
 
 node_modules
 src/appPrueba.js
+
+src/.env.development
+src/.env.production
+errors.log
+errors-prod.log
+errors-dev.log

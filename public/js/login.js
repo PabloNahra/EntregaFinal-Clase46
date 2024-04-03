@@ -22,10 +22,9 @@ restoreBtn.addEventListener('click', async (e) => {
     }
 })
 
+
 recuperarBtn.addEventListener('click', async (e) => {
-    console.log("Dentro de recuperar btn")
     const email = emailInput.value
-    // const password = passwordInput.value
     const result = await fetch('http://localhost:8080/api/session/recover', {
         body: JSON.stringify({email}),
         headers: {
@@ -34,9 +33,9 @@ recuperarBtn.addEventListener('click', async (e) => {
         method: 'POST'
     })
     if(result.status === 200 || result.status===201){
-        resultMessage.innerHTML = 'Password restaurada'
+        resultMessage.innerHTML = 'Revise su casilla de correo'
     }
     else {
-        resultMessage.innerHTML = 'Error al restaurar password'
+        resultMessage.innerHTML = 'NO pudimos enviar el email de recuperación'
     }
 })

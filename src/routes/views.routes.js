@@ -45,4 +45,8 @@ viewsRoutes.get('/faillogin', (req, res) => {
   res.render('faillogin')
 })
 
+viewsRoutes.get('/recoverpass', (req, res) => {
+  res.render('recoverpass')
+})
+
 export default viewsRoutes

@@ -56,9 +56,8 @@ export const addLogger = (req, res, next) => {
             req.logger.error(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()}`)
             break
         case 'production':
-            console.log("Dentro de prod")
             req.logger = prodLogger
-            req.logger.error(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()}`)
+            //req.logger.error(`${req.method} en ${req.url} - ${new Date().toLocaleTimeString()}`)
             break
         default:
             throw new Error('enviroment doesnt exists')

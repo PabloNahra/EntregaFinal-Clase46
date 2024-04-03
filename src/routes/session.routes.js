@@ -2,8 +2,11 @@ import { Router } from "express";
 import { userModel } from "../models/user.model.js";
 import { createHash } from "../utils/bcrypt.js";
 import passport from "passport";
-import { getSessionEmail } from "../controllers/sessions.controller.js";
+import { getSessionEmail, 
+    userRecoverPassByMail
+} from "../controllers/sessions.controller.js";
 import { checkRolAdmin } from "../middlewares/auth.js";
+import MailingService from "../services/mailing.js";
 
 const sessionRoutes = Router()
 
@@ -35,6 +38,17 @@ sessionRoutes.post(
             email: req.user.email,
             role: req.user.role
         }
+        // Aviso por mail de sesión iniciada
+        const mailingService = new MailingService()
+        await mailingService.sendSimpleMail({
+            from: 'Coderhouse', 
+            to: req.user.email,
+            subject: 'CoderHouse - BackEnd - Inicio de Sesión', 
+            html: `
+                <h1>Inicio de sesión exitoso</h1>
+                <h2>Bienvenido a nuestro e-commerce</h2>
+            `
+        })
         res.redirect('/')
 })
 
@@ -52,8 +66,10 @@ sessionRoutes.post('/logout', async (req, res) => {
     }
 })
 
-sessionRoutes.post('/recovery', async (req, res) => {
-    const {email, password } = req.body
+
+// cambiar la contraseña por la que indique el usuarios en la pagina
+sessionRoutes.post('/restore', async (req, res) => {
+    const {email, password} = req.body
     const user = await userModel.findOne({email})
     if(!user){
         return res.status(400).send({message: 'Error'})
@@ -62,6 +78,9 @@ sessionRoutes.post('/recovery', async (req, res) => {
     user.save()
     res.send({message: 'Password changed'})
 })
+
+// Enviar un mail para indicar una nueva contraseña
+sessionRoutes.post('/recover', userRecoverPassByMail)
 
 sessionRoutes.get(
     '/github', 

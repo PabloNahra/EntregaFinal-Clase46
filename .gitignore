@@ -12,3 +12,6 @@ src/.env.production
 errors.log
 errors-prod.log
 errors-dev.log
+package.json
+src/.env.production
+package.json

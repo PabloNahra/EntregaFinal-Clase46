@@ -1,5 +1,5 @@
 import SessionDTO from "../dtos/session.dto.js";
-
+import { sessionsServicesRep } from "../dao/repositories/index.js";
 
 export const getSession = async (req, res) => {
     try {
@@ -15,7 +15,7 @@ export const getSession = async (req, res) => {
     }
   }
 
-  export const getSessionEmail = async (req, res) => {
+export const getSessionEmail = async (req, res) => {
     try {
       const sessionActual = new SessionDTO(req.session.user)
       if(sessionActual.email){
@@ -28,5 +28,19 @@ export const getSession = async (req, res) => {
     }
   }
 
+export const userRecoverPassByMail = async (req, res) => {
+  const {email} = req.body
+  try {
+    const resultado = await sessionsServicesRep.recoverPassRep(email)
+    if(resultado){
+      res.send({resultado})
+    } else {
+      res.status(400).json(resultado)
+    }
+  } catch (error) {
+    console.error(error)
+    res.status(400).json({message: `No podemos restaurar la contraseña: ${error}`})
+  }
+}
 
 

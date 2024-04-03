@@ -7,7 +7,6 @@ import { addLogger } from "../utils/logger.js";
 
 const productsRoutes = Router()
 
-//productsRoutes.get('/', addLogger, getProducts)
 productsRoutes.get('/', getProducts)
 
 productsRoutes.get('/:uId', getProductsById)

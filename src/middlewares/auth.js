@@ -41,3 +41,4 @@ export const checkRolUser = (req, res, next) => {
         return res.status(401).send({message: 'Unauthorized'})
     }
 }
+

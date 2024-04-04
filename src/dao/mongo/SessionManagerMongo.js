@@ -1,11 +1,12 @@
 import { userModel } from "../../models/user.model.js";
 import MailingService from "../../services/mailing.js";
-
+import crypto from 'crypto'; // Importar el módulo crypto para la generación del ID aleatorio
 
 export class SessionManager {
     constructor(path){
         this.path = path
     }
+
 
     async recoverPass(email){
         try {
@@ -16,8 +17,20 @@ export class SessionManager {
             if(!user || user == null ){
                 return {message: `Usuario NO encontrado`}
             } else {
+                // Generar id 
+                const idLength = 20; // Longitud del ID
+                const randomBytes = crypto.randomBytes(Math.ceil(idLength / 2));
+                const id = randomBytes.toString('hex').slice(0, idLength);
+
+                console.log("id")
+                console.log(id)
+
+                // Guardar el ID y fecha en el user
+                user.recover_id = id
+                user.recover_datetime = new Date()
+                user.save()
+                
                 //Enviar mail de recuperación
-                // Aviso por mail de sesión iniciada
                 const mailingService = new MailingService()
                 await mailingService.sendSimpleMail({
                     from: 'Coderhouse', 
@@ -27,7 +40,7 @@ export class SessionManager {
                         <h1>Coder e-commerce</h1>
                         <h2>Recuperación de contraseña</h2>
                         <p>Haz clic en el siguiente botón para recuperar tu contraseña:</p>
-                        <a href="http://localhost:8080/recoverpass" style="display: inline-block; background-color: #4CAF50; color: white; padding: 14px 20px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer; border-radius: 10px;">Recuperar</a>
+                        <a href="http://localhost:8080/recoverpass/${id}" style="display: inline-block; background-color: #4CAF50; color: white; padding: 14px 20px; text-align: center; text-decoration: none; display: inline-block; font-size: 16px; margin: 4px 2px; cursor: pointer; border-radius: 10px;">Recuperar</a>
                     `
                 })
                 return {message: "Email de recuperación enviado"}

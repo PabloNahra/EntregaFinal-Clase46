@@ -31,6 +31,14 @@ const userSchema = mongoose.Schema({
         required: false,
         ref: 'carts'
     },
+    recover_id: {
+        type: String,
+        default: ''
+    },
+    recover_datetime: {
+        type: Date,
+        default: null
+    }
 })
 
 export const userModel = mongoose.model(userCollection, userSchema)

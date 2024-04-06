@@ -43,9 +43,23 @@ export class ProdManager {
         return product        
     }
 
-    async deleteProduct(id){
+    async deleteProduct(id, user){
         try {
-            const productDeleted = await productsModel.deleteOne({_id: id})
+
+            let productDeleted = null;
+
+            // Validar si el usuario es premium que el producto le pertenezca
+            if(user.role.toUpperCase() ==='PREMIUM'){
+                const prodToDel = await productsModel.findOne({_id: id})
+                if(prodToDel && prodToDel.owner && prodToDel.owner === user.email){
+                    productDeleted = await productsModel.deleteOne({_id: id})
+                } else {
+                    return {message: `Producto NO se puede eliminar porque no le perenece al Usuario (Owner): ${id}`}
+                }
+            } else {
+                productDeleted = await productsModel.deleteOne({_id: id})
+            }
+            
             if(productDeleted.deletedCount > 0){
               return {message: `Producto eliminado correctamente - Id: ${id}`}
             } else {

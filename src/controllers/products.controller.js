@@ -49,8 +49,6 @@ export const postProduct = async (req, res) => {
       }else{
         newProduct.owner = 'ADMIN';
       }
-      console.log("newProduct.owner")
-      console.log(newProduct.owner)
 
       if (!newProduct.title || !newProduct.description 
         || !newProduct.code 
@@ -79,7 +77,10 @@ export const postProduct = async (req, res) => {
 export const deleteProduct = async (req, res) => {
   const { uId } = req.params
   try {
-    const resultado = await productsServicesRep.delProd(uId)
+    // Envio datos del usuario
+    const user = req.session.user
+
+    const resultado = await productsServicesRep.delProd(uId, user)
     if(resultado){
       res.send({resultado})
     } else {

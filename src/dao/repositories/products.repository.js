@@ -22,8 +22,8 @@ export default class ProductRepository {
         return result
     }
 
-    delProd = async (id) => {
-        const result = await this.dao.deleteProduct(id)
+    delProd = async (id, user) => {
+        const result = await this.dao.deleteProduct(id, user)
         return result
     }
 

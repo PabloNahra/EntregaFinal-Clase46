@@ -3,7 +3,8 @@ import { userModel } from "../models/user.model.js";
 import { createHash } from "../utils/bcrypt.js";
 import passport from "passport";
 import { getSessionEmail, 
-    userRecoverPassByMail
+    userRecoverPassByMail,
+    userRecoverNewPass
 } from "../controllers/sessions.controller.js";
 import { checkRolAdmin } from "../middlewares/auth.js";
 import MailingService from "../services/mailing.js";
@@ -81,6 +82,9 @@ sessionRoutes.post('/restore', async (req, res) => {
 
 // Enviar un mail para indicar una nueva contraseña
 sessionRoutes.post('/recover', userRecoverPassByMail)
+
+// Confirmar la nueva contraseña
+sessionRoutes.post('/recoverpass/:rId', userRecoverNewPass)
 
 sessionRoutes.get(
     '/github', 

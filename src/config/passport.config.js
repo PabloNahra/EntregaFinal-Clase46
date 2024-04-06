@@ -12,14 +12,12 @@ const localStrategy = local.Strategy
 
 // Colocamos cada una de las estrategias
 const initializePassport = () => {
-    console.log("initializePassport")
     passport.use('register', new localStrategy(
         { passReqToCallback: true, usernameField: 'email'},
         async (req, username, password, done) => {
             const { first_name, last_name, email, age, role} = req.body
             const userReg = req.body
 
-            
             // Incorporo control de errores
             if (!first_name || !last_name || !email || !age) {
                 CustomErrors.createError({
@@ -29,11 +27,9 @@ const initializePassport = () => {
                     code: ErrorEnum.INVALID_TYPE_ERROR
                 })}
             
-
             try {
                 const user = await userModel.findOne({email: username})
                 if(user){
-                    console.log('Usuario existente')
                     return done(null, false)
                 }
                 const newUser = {
@@ -59,7 +55,6 @@ const initializePassport = () => {
             try {
                 const user = await userModel.findOne({email: username})
                 if(!user){
-                    console.log('Usuario inexistente')
                     return done(null, false)
                 }
                 if(!isValidPassword(user, password)){

@@ -43,4 +43,23 @@ export const userRecoverPassByMail = async (req, res) => {
   }
 }
 
+export const userRecoverNewPass = async (req, res) => {
+  // ID de la recuperación de contraseña
+  const { rId } = req.params
+  const { newPass } = req.body
+  console.log("dentro de controler ID")
+  console.log(rId)
+  console.log(newPass)
+  try {
+    const resultado = await sessionsServicesRep.recoverNewPassRep(rId, newPass)
+    if(resultado){
+      res.send({resultado})
+    } else {
+      res.status(400).json(resultado)
+    }
+  } catch (error) {
+    console.error(error)
+    res.status(400).json({message: `No podemos restaurar la contraseña: ${error}`})
+  }
+}
 

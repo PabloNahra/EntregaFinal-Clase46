@@ -10,4 +10,9 @@ export default class SessionRepository {
         const result = await this.dao.recoverPass(email)
         return result
     }
+
+    recoverNewPassRep = async(rId, newPass) => {
+        const result = await this.dao.recoverNewPass(rId, newPass)
+        return result
+    }
 }

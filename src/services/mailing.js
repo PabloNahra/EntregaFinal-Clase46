@@ -10,8 +10,6 @@ program.option('--mode <mode>', 'Modo de trabajo', 'production')
 const options = program.parse()
 const { mailing } = getVariables(options)
 
-console.log(mailing)
-
 export default class MailingService {
     constructor() {
         this.client = mailer.createTransport({

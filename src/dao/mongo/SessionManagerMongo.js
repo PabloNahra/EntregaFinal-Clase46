@@ -1,12 +1,12 @@
 import { userModel } from "../../models/user.model.js";
 import MailingService from "../../services/mailing.js";
 import crypto from 'crypto'; // Importar el módulo crypto para la generación del ID aleatorio
+import { createHash } from "../../utils/bcrypt.js";
 
 export class SessionManager {
     constructor(path){
         this.path = path
     }
-
 
     async recoverPass(email){
         try {
@@ -48,6 +48,38 @@ export class SessionManager {
         } catch (error) {
             return {message: `No se pudo enviar el email de recuperacion - ${error}`}
         }
+    }
+
+    async recoverNewPass(rId, newPass){
+        try {
+            console.log("en Sesion Manager rId")
+            console.log(rId)
+            // Chequear que el rId exista para un usuario y tomar sus datos
+            const user = await userModel.findOne({recover_id: rId})
+            if(!user || user == null ){
+                return {message: `Link de recuperación incorrecto`}
+            } 
+            
+            // Validar que nueva PassWord no sea igual a la anterior; sino retornar aviso 
+            /*
+            console.log(user.password)
+            console.log(newPass)
+            console.log(newPassHash)
+            */
+            const newPassHash = createHash(newPass)
+            if (user.password != newPassHash){
+                // Modificar la clave
+                console.log("Clave nueva distinta")
+                user.password = newPassHash
+                user.save()
+                return {message: 'Password changed'}
+            } else {
+                return {message: `La nueva clave es igual a la anterior. Debe optar por otra.`}
+            }
+        } catch (error) {
+            return {message: `No se pudo modificar el password - ${error}`}
+        }
+
     }
 }
 

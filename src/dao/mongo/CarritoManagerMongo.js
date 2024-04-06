@@ -5,6 +5,7 @@ import { ProdManager } from "../mongo/ProductManagerMongo.js";
 import ProductDTO from "../../dtos/product.dto.js";
 import { TicketManager } from "../mongo/TicketManagerMongo.js"; 
 import TicketDTO from '../../dtos/ticket.dto.js';
+import { productsModel } from '../../models/products.model.js';
 
 
 const prodManager = new ProdManager(); 
@@ -26,8 +27,37 @@ export class CartManager {
     }
   }
 
-  async addCart(cart) {
+  async addCart(cart, user) {
     try {
+      // Chequeo que los productos existan en la base de datos
+      for (const item of cart.products) {
+        const productId = item.product;
+
+        // Consultar el producto en la base de datos
+        const product = await productsModel.findById(productId);
+        if (!product) {
+          return { message: `Producto inexistente ${productId}` };
+        }
+      }
+
+      // Si el usuario es Premium, controlar que ningun producto sea de él
+      if (user.role.toUpperCase() === "PREMIUM") {
+        console.log("user premium");
+        // Validar que ningún producto en el carrito pertenezca al usuario
+        for (const item of cart.products) {
+          const productId = item.product;
+
+          // Consultar el producto en la base de datos
+          const product = await productsModel.findById(productId);
+          if (product && product.owner && product.owner === user.email) {
+            return {
+              message:
+                "Revise los productos. Un usuario Premium NO puede agregar productos que le pertenecen",
+            };
+          }
+        }
+      }
+
       const added = await cartsModel.create(cart);
       if (added) {
         return { message: "Carrito creado exitosamente" };
@@ -67,27 +97,27 @@ export class CartManager {
     }
   }
 
-    async addProductsInCart(cId, pId, quantity) {
-        try {
-            const cart = await cartsModel.findOne({ _id: cId });
-            if (cart) {
-                const existingProducts = cart.products.find(
-                    (product) => product.product.toString() === pId
-                );
-                if (existingProducts) {
-                    existingProducts.quantity += quantity;
-                } else {
-                    cart.products.push({ product: pId, quantity });
-                }
-                await cart.save();
-                return true;
-            } else {
-                return false;
-            }
-        } catch (e) {
-            return false;
+  async addProductsInCart(cId, pId, quantity) {
+    try {
+      const cart = await cartsModel.findOne({ _id: cId });
+      if (cart) {
+        const existingProducts = cart.products.find(
+          (product) => product.product.toString() === pId
+        );
+        if (existingProducts) {
+          existingProducts.quantity += quantity;
+        } else {
+          cart.products.push({ product: pId, quantity });
         }
+        await cart.save();
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
     }
+  }
   // Elimino un producto dentro de un carrito
   async deleteProductInCart(cId, pId) {
     try {
@@ -106,9 +136,9 @@ export class CartManager {
       console.error(error);
       return false;
     }
-}
+  }
 
-    async getCartById(id) {
+  async getCartById(id) {
     try {
       const cart = await cartsModel
         .findOne({ _id: id })
@@ -127,8 +157,25 @@ export class CartManager {
     }
   }
 
-  async updateCart(cId, cart) {
+  async updateCart(cId, cart, user) {
     try {
+      // Si el usuario es Premium, controlar que ningun producto sea de él
+      if (user.role.toUpperCase() === "PREMIUM") {
+        // Validar que ningún producto en el carrito pertenezca al usuario
+        for (const item of cart.products) {
+          console.log(item)
+          const productId = item.product;
+
+          // Consultar el producto en la base de datos
+          const product = await productsModel.findById(productId);
+          console.log(product)
+          if (product && product.owner && product.owner === user.email) {
+            console.log("es prd premium")
+            return { message: "Revise los productos. Un usuario Premium NO puede agregar productos que le pertenecen" };
+          }
+        }
+      }
+
       const resultado = await cartsModel.updateOne({ _id: cId }, cart);
       return resultado;
     } catch (error) {
@@ -137,11 +184,14 @@ export class CartManager {
     }
   }
 
-  async updateProductInCart(cId, pId, quantity) {
+  async updateProductInCart(cId, pId, quantity, user) {
     if (!quantity) {
       return false;
     }
     try {
+      // Si el usuario es PREMIUM chequeo que el producto NO le pertenezca
+      console.log(user);
+
       const cart = await cartsModel.findOne({ _id: cId });
       if (!cart) {
         return false;
@@ -193,7 +243,7 @@ export class CartManager {
       const newCart = prodInCart;
       let montoCompra = 0;
       let quantityTotal = 0;
-      const prodSinStock = []; 
+      const prodSinStock = [];
 
       for (const prod of prodInCart.rdo) {
         let quantityConfirm = 0;
@@ -208,15 +258,15 @@ export class CartManager {
 
           quantityTotal += quantityConfirm;
           montoCompra += quantityConfirm * prod.product.price;
-        // Puedo entregar un parcial de las unidades del producto
+          // Puedo entregar un parcial de las unidades del producto
         } else if (stockProducto > 0) {
           quantityConfirm = stockProducto;
           quantityTotal += quantityConfirm;
           montoCompra += quantityConfirm * prod.product.price;
-          prodSinStock.push(prod.product._id)
+          prodSinStock.push(prod.product._id);
         } else {
           quantityConfirm = 0;
-          prodSinStock.push(prod.product._id)
+          prodSinStock.push(prod.product._id);
         }
 
         // Descontar del stock del producto (ojo con negativos) y del carrito
@@ -237,7 +287,7 @@ export class CartManager {
           // Si complete la entrega del producto (todas las unidades)
           if (stockInCartRestante === 0) {
             this.deleteProductInCart(cId, prod.product._id.toString());
-          } 
+          }
           // Si complete la entrega del producto parcialmente (algunas unidades)
           else if (stockInCartRestante > 0) {
             this.updateProductInCart(
@@ -245,7 +295,7 @@ export class CartManager {
               prod.product._id.toString(),
               stockInCartRestante
             );
-          } 
+          }
         }
       }
 
@@ -259,16 +309,16 @@ export class CartManager {
         let tkNew = new TicketDTO(tk);
         const tkresult = await tkManager.addTk(tkNew);
         return tkresult;
-      } else if (prodSinStock != 0){
+      } else if (prodSinStock != 0) {
         // Devolver el arreglo con los productos que no se pudieron entregar
-        return {message: `No se pudieron entregar estos producto  - IDs: ${prodSinStock}`}
+        return {
+          message: `No se pudieron entregar estos producto  - IDs: ${prodSinStock}`,
+        };
       } else {
         return {
           message: `No se pudo entregar ningun producto - ${prodSinStock}`,
         };
       }
-
-
     } catch (error) {
       console.error(error);
       return false;

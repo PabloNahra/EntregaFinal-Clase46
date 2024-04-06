@@ -17,9 +17,9 @@ export default class CartRepository {
         return result
     }
 
-    createCartRep = async (cart) => {
+    createCartRep = async (cart, user) => {
         const newCart = cart //new CartDTO(cart)
-        const result = await this.dao.addCart(newCart)
+        const result = await this.dao.addCart(newCart, user)
         return result
     }
 
@@ -28,14 +28,14 @@ export default class CartRepository {
         return result
    }
 
-   putCartByIdRep = async (id, cart) => {
+   putCartByIdRep = async (id, cart, user) => {
     const updateCart = cart
-    const result = await this.dao.updateCart(id, updateCart)
+    const result = await this.dao.updateCart(id, updateCart, user)
     return result
     }
 
-    updateProdQuantityRep = async(cId, pId, quantity) => {
-    const result = await this.dao.updateProductInCart(cId, pId, quantity)
+    updateProdQuantityRep = async(cId, pId, quantity, user) => {
+    const result = await this.dao.updateProductInCart(cId, pId, quantity, user)
     return result
     }
 

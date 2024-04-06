@@ -64,7 +64,8 @@ export const getCartsById = async (req, res) => {
 export const postCart = async (req, res) => {
   try {
     const newCart = req.body
-    const resultado = await cartsServicesRep.createCartRep(newCart)
+    const user = req.session.user
+    const resultado = await cartsServicesRep.createCartRep(newCart, user)
     if(resultado){
       res.send(resultado)
     } else {
@@ -93,8 +94,9 @@ export const deleteCartById = async (req, res) => {
 export const putCartById = async (req, res) => {
   const { cId } = req.params
   const cart = req.body
+  const user = req.session.user
   try {
-    const resultado = await cartsServicesRep.putCartByIdRep(cId, cart)
+    const resultado = await cartsServicesRep.putCartByIdRep(cId, cart, user)
     if(resultado.modifiedCount > 0){
       res.send({message: "Carro modificado"})
     } else {
@@ -110,9 +112,10 @@ export const putCartById = async (req, res) => {
 export const putProductsInCart = async (req, res) => {
   const { cId, pId} = req.params
   const {quantity} = req.body
+  const user = req.session.user
 
   try {
-    const resultado = await cartsServicesRep.updateProdQuantityRep(cId, pId, quantity)
+    const resultado = await cartsServicesRep.updateProdQuantityRep(cId, pId, quantity, user)
     if(resultado){
       return res.send({resultado})
     } else {

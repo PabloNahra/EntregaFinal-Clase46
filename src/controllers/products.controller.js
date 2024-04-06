@@ -3,6 +3,14 @@ import CustomErrors from '../services/errors/CustomError.js'
 import ErrorEnum from "../services/errors/error.enum.js";
 import { generateProductErrorInfo } from "../services/errors/info.js";
 
+
+function isValidEmail(email) {
+  // Expresión regular para validar un correo electrónico
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  // Verificar si la cadena cumple con el formato de correo electrónico
+  return emailRegex.test(email);
+}
+
 export const getProducts = async (req, res) => {
     try {
       const { limit=10, page=1, query='', sort= ''} = req.query
@@ -35,6 +43,14 @@ export const getProductsById = async (req, res) => {
 export const postProduct = async (req, res) => {
     try {
       const newProduct = req.body
+      // Agrego el owner con el Role del usuario
+      if(req.session.user.role.toUpperCase()==='PREMIUM'){
+        newProduct.owner = req.session.user.email;
+      }else{
+        newProduct.owner = 'ADMIN';
+      }
+      console.log("newProduct.owner")
+      console.log(newProduct.owner)
 
       if (!newProduct.title || !newProduct.description 
         || !newProduct.code 

@@ -39,7 +39,11 @@ const productsSchema = mongoose.Schema({
     thumbnail: {
         type: [],
         required: false
-    } 
+    },
+    owner: {
+        type: String,
+        default: "ADMIN"
+    }
 })
 
 productsSchema.plugin(mongoosePaginate)

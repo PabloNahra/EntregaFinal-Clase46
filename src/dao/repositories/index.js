@@ -3,15 +3,18 @@ import { Carts } from "../factory/cartFactory.js";
 import { Tickets } from "../factory/ticketFactory.js";
 import { Mocks } from "../factory/mockFactory.js";
 import { Sessions } from "../factory/sessionFactory.js";
+import { Users } from "../factory/userFactory.js";
 
 import ProductRepository from "./products.repository.js";
 import CartRepository from "./carts.repository.js";
 import TicketRepository from "./tickets.repository.js";
 import MockRepository from "./mock.repository.js";
 import SessionRepository from "./sessions.repository.js";
+import UserRepository from "./users.repository.js";
 
 export const productsServicesRep = new ProductRepository(new Products())
 export const cartsServicesRep = new CartRepository(new Carts())
 export const ticketsServicesRep = new TicketRepository(new Tickets())
 export const mocksServicesRep = new MockRepository(new Mocks())
 export const sessionsServicesRep = new SessionRepository(new Sessions())
+export const usersServicesRep = new UserRepository(new Users())

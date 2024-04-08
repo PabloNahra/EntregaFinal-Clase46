@@ -17,6 +17,7 @@ import { secret } from './config/consts.js'
 import { getVariables } from './config/config.js'
 import { errorHandler } from './middlewares/error.js'
 import { addLogger } from './utils/logger.js'
+import usersRoutes from './routes/users.routes.js'
 
 
 const app = express()
@@ -84,6 +85,7 @@ app.use('/api/carts', cartsRoutes)
 app.use('/api/chats', chatsRoutes)
 app.use('/api/session', sessionRoutes)
 app.use('/api/tickets', ticketsRoutes)
+app.use('/api/users', usersRoutes)
 app.use('/', viewsRoutes)
 
 // Manejo de errores

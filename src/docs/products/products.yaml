@@ -1,11 +1,141 @@
 paths:
   /api/products:
     get:
-      sumary: Obtiene todos los productos
+      summary: Obtiene todos los productos
       tags:
         - Products
       responses:
         "200":
           description: Los productos se han obtenido satisfactoriamente.
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  $ref: '#components/schemas/Products'
         "400":
           description: Los productos NO se han podido obtener.
+  
+  /api/products/{uId}:
+    get:
+      summary: Obtiene un producto en particular por su Id
+      tags:
+        - Products
+      parameters:
+        - name: uId
+          in: path
+          description: Id del producto
+          schema:
+            type: ObjectId
+      responses:
+        "200":
+          description: El producto ha sido obtenido satisfactoriamente.
+          content:
+            application/json:
+              schema: 
+                $ref: '#components/schemas/Products'
+        "400":
+          description: El producto NO se ha podido obtener.
+    put:
+      summary: Modifica el producto a partir de su Id
+      tags:
+        - Products
+      parameters:
+        - name: uId
+          in: path
+          description: Id del producto a actualizar
+          schema:
+            type: String
+      requestBody:
+        require: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/updateProduct'
+
+
+components:
+  schemas:
+    Products:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: ID autogenerado por Mongo
+        title:
+          type: String
+          description: Nombre del producto
+        description:
+          type: String
+          description: Descripción del producto
+        code:
+          type: String
+          description: Codigo del producto
+        price:
+          type: Number
+          description: Precio del producto
+        available:
+          type: Boolean
+          description: Available SI/NO
+        stock:
+          type: Number
+          description: Cantidad en stock
+        category:
+          type: String
+          description: Categoria del producto
+        thumbnail:
+          type: Array[]
+          description: Link a las fotos del producto
+        owner:
+          type: String
+          description: email del usuario dueño del producto o "ADMIN"
+      example:
+        _id: ObjectId("65e8d8ace25d0afffb59ce1a")
+        title: Alfombra A
+        description: Alfombra de Crochet
+        code: 20240306-H
+        price: 2500
+        available: 1
+        stock: 500
+        category: Casa
+        thumbnail: [
+                "https://bumypei.mitiendanube.com/productos/alfombras-redondas-tejidas-al-crochet/",
+                "https://ar.pinterest.com/pin/80290805844909292/visual-search/?x=16&y=16&w=368&h=428"
+            ]
+        owner: ADMIN
+  requestBodies:
+    updateProduct:
+      type: object
+      properties:
+        title:
+          type: String
+          description: Nombre del producto
+        description:
+          type: String
+          description: Descripción del producto
+        code:
+          type: String
+          description: Codigo del producto
+        price:
+          type: Number
+          description: Precio del producto
+        available:
+          type: Boolean
+          description: Available SI/NO
+        stock:
+          type: Number
+          description: Cantidad en stock
+        category:
+          type: String
+          description: Categoria del producto
+        thumbnail:
+          type: Array[]
+          description: Link a las fotos del producto
+      example:
+        title: Alfombra A
+        description: Alfombra de Crochet
+        code: 20240306-H
+        price: 3500
+        available: 1
+        stock: 400
+        category: Casa

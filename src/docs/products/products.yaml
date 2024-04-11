@@ -1,0 +1,11 @@
+paths:
+  /api/products:
+    get:
+      sumary: Obtiene todos los productos
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Los productos se han obtenido satisfactoriamente.
+        "400":
+          description: Los productos NO se han podido obtener.

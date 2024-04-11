@@ -18,6 +18,9 @@ import { getVariables } from './config/config.js'
 import { errorHandler } from './middlewares/error.js'
 import { addLogger } from './utils/logger.js'
 import usersRoutes from './routes/users.routes.js'
+import swaggerJSDoc from 'swagger-jsdoc'
+import { swaggerConfiguration } from './utils/swagger-configuration.js'
+import swaggerUIexpress from 'swagger-ui-express'
 
 
 const app = express()
@@ -43,6 +46,9 @@ app.use(session({
     saveUninitialized: true
 }))
 
+// Swagger documentación
+const specs = swaggerJSDoc(swaggerConfiguration)
+app.use('/apidocs', swaggerUIexpress.serve, swaggerUIexpress.setup(specs))
 
 // Utilización de passport
 initializePassport()

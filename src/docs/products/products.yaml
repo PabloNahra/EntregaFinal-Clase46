@@ -15,6 +15,17 @@ paths:
                   $ref: '#components/schemas/Products'
         "400":
           description: Los productos NO se han podido obtener.
+    post:
+      summary: Genera el alta de un producto a partir de los datos enviados en el body
+      tags:
+        - Products
+      requestBody:
+        require: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/requestBodies/postProduct'
+
   
   /api/products/{uId}:
     get:
@@ -52,6 +63,22 @@ paths:
           application/json:
             schema:
               $ref: '#components/requestBodies/updateProduct'
+    delete:
+      summary: Eliminar el producto a partir de su Id
+      tags:
+        - Products
+      parameters:
+        - name: uId
+          in: path
+          description: Id del producto a eliminar
+          schema:
+            type: String
+      responses:
+        "200":
+          description: El producto ha sido eliminado satisfactoriamente
+        "400":
+          description: El producto NO se ha podido eliminar
+
 
 
 components:
@@ -105,6 +132,41 @@ components:
         owner: ADMIN
   requestBodies:
     updateProduct:
+      type: object
+      properties:
+        title:
+          type: String
+          description: Nombre del producto
+        description:
+          type: String
+          description: Descripción del producto
+        code:
+          type: String
+          description: Codigo del producto
+        price:
+          type: Number
+          description: Precio del producto
+        available:
+          type: Boolean
+          description: Available SI/NO
+        stock:
+          type: Number
+          description: Cantidad en stock
+        category:
+          type: String
+          description: Categoria del producto
+        thumbnail:
+          type: Array[]
+          description: Link a las fotos del producto
+      example:
+        title: Alfombra A
+        description: Alfombra de Crochet
+        code: 20240306-H
+        price: 3500
+        available: 1
+        stock: 400
+        category: Casa
+    postProduct:
       type: object
       properties:
         title:

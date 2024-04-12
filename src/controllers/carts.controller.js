@@ -148,7 +148,7 @@ export const postProductsInCart = async (req,res)=>{
   try {
     const {cId, pId} = req.params
     const newQuantity =  req.body.quantity
-    const resultado = await cartsServicesRep.putProdInCartRep(cId, pId, productToUpdate)
+    const resultado = await cartsServicesRep.putProdInCartRep(cId, pId, newQuantity)
     if(resultado){
       return res.send({resultado})
     } else {

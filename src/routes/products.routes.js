@@ -5,7 +5,7 @@ import { deleteProduct, getProducts,
 import { applyPolicies, checkRolAdmin } from "../middlewares/auth.js";
 import { addLogger } from "../utils/logger.js";
 
-const productsRoutes = Router()
+const productsRoutes = Router() 
 
 productsRoutes.get('/', getProducts)
 

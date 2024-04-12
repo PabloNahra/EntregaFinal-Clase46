@@ -189,9 +189,6 @@ export class CartManager {
       return false;
     }
     try {
-      // Si el usuario es PREMIUM chequeo que el producto NO le pertenezca
-      console.log(user);
-
       const cart = await cartsModel.findOne({ _id: cId });
       if (!cart) {
         return false;
@@ -237,7 +234,6 @@ export class CartManager {
   }
 
   async confirm(cId, user) {
-    console.log("Mongo confirm");
     try {
       const prodInCart = await this.getCartById(cId);
       const newCart = prodInCart;
@@ -327,4 +323,3 @@ export class CartManager {
 }
 
 export default CartManager
-

@@ -9,11 +9,12 @@ class UserDTO {
                 return {
                     name: document.name || '',
                     reference: document.reference || ''
-                };
-            });
+                }
+            })
         } else {
-            this.documents = [];
+            this.documents = []
         }
+        this.last_connection = user.last_connection 
     }
 }
 

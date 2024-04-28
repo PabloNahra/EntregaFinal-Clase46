@@ -56,12 +56,17 @@ sessionRoutes.post(
 
 sessionRoutes.post('/logout', async (req, res) => {
     try {
+        // Actualizar last_connection antes de que el login sea exitoso
+        console.log("dentro de logout")
+        user.last_connection = new Date(); 
+        await user.save(); 
+
         req.session.destroy((err) => {
             if(err){
                 return res.status(500).json ({message: "Fallo al realizar Logout"})
             }            
+            res.send({redirect: 'http://localhost:8080/login'})
         })
-        res.send({redirect: 'http://localhost:8080/login'})
         // res.redirect('/login')
     } catch (error) {
         res.status(400).send({error})

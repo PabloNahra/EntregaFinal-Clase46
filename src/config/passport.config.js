@@ -61,6 +61,9 @@ const initializePassport = () => {
                 if(!isValidPassword(user, password)){
                     return done(null, false)
                 }
+                // Actualizar last_connection antes de que el login sea exitoso
+                user.last_connection = new Date(); 
+                await user.save(); 
                 return done(null, user)
             } catch (error) {
                 return done(error)

@@ -43,7 +43,11 @@ const userSchema = mongoose.Schema({
     documents: [{
         name: String,
         reference: String
-    }]
+    }],
+    last_connection: {
+        type: Date,
+        default: Date.now
+    }
 })
 
 export const userModel = mongoose.model(userCollection, userSchema)

@@ -20,7 +20,8 @@ sessionRoutes.post(
             last_name: req.user.last_name,
             age: req.user.age,
             email: req.user.email,
-            role: req.user.role
+            role: req.user.role,
+            documents: req.body.documents || [] 
         };
         res.redirect('/')
 })

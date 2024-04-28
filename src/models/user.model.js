@@ -39,7 +39,11 @@ const userSchema = mongoose.Schema({
     recover_datetime: {
         type: Date,
         default: null
-    }
+    },
+    documents: [{
+        name: String,
+        reference: String
+    }]
 })
 
 export const userModel = mongoose.model(userCollection, userSchema)

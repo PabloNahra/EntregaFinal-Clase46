@@ -15,7 +15,7 @@ const initializePassport = () => {
     passport.use('register', new localStrategy(
         { passReqToCallback: true, usernameField: 'email'},
         async (req, username, password, done) => {
-            const { first_name, last_name, email, age, role} = req.body
+            const { first_name, last_name, email, age, role, documents} = req.body
             const userReg = req.body
 
             // Incorporo control de errores
@@ -38,7 +38,8 @@ const initializePassport = () => {
                     email,
                     age,
                     role,
-                    password: createHash(password)
+                    password: createHash(password),
+                    documents
                 }
                 const result = await userModel.create(newUser)
                 return done(null, result)

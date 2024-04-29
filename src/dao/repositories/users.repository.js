@@ -16,8 +16,8 @@ export default class UserRepository {
         return result
     }
 
-    postDocum =  async(uId, req, res) => {
-        const result = await this.dao.postDocuments(uId, req, res)
+    postDocum =  async(uId, files) => {
+        const result = await this.dao.postDocuments(uId, files)
         return result
     }
     

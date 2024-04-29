@@ -56,7 +56,7 @@ export class UserManager {
     }
   }
 
-  async postDocuments(uId, req, res) {
+  async postDocuments(uId, files) {
     try {
       console.log("Dentro del Manager postDocuments")
       // Chequear que el userID es un ObjectId
@@ -71,32 +71,10 @@ export class UserManager {
       }
 
       // Subir archivos con Multer
-      console.log("Subir archivos con Multer");
-
-      // Llamas al middleware de multer dentro de tu función
-
-      // Verificar si se envió un archivo en la solicitud
-      if (!req.file) {
-        console.log("Sin archivo")
-        return { message: `No se envio ningun archivo` };
-      }
+      console.log("Subir MULTIPLES archivos con Multer");
+      console.log("const files en Manager")
+      console.log(files)
       
-      uploader.single('file') (req, res, function (err) {
-        if (err instanceof multer.MulterError) {
-          // Ocurrió un error de multer
-          //return res.status(400).json({ error: "Error al subir el archivo." });
-          return { message: `Error al subir el archivo` };
-        } else if (err) {
-          // Otro tipo de error
-          //return res.status(500).json({ error: "Ocurrió un error interno." });
-          return { message: `Error interno` };
-        }
-
-        // El archivo se subió correctamente
-        // Puedes acceder al archivo subido mediante req.file
-        //console.log(req.file);
-        // Resto de la lógica de tu función postDoc
-      });
     } catch (error) {
       console.error(error);
       return { message: `No se pudieron subir los archivos - ${error}` };

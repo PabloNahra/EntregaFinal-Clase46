@@ -30,7 +30,8 @@ export const changeRole = async (req, res) => {
 export const postDoc = async (req, res) => {
   try {
     const { uId} = req.params
-    const resultado = await usersServicesRep.postDocum(uId, req, res)
+    const files = req.files
+    const resultado = await usersServicesRep.postDocum(uId, files)
     if(resultado){
       res.send(resultado)
     } else {

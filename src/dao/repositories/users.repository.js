@@ -15,5 +15,10 @@ export default class UserRepository {
         const result = await this.dao.changeRole(uId)
         return result
     }
+
+    postDocum =  async(uId, req, res) => {
+        const result = await this.dao.postDocuments(uId, req, res)
+        return result
+    }
     
 }

@@ -26,3 +26,17 @@ export const changeRole = async (req, res) => {
     res.status(400).json({message: `No se pudo modificar el rol del usuario - ${error}`})
   }
 }
+
+export const postDoc = async (req, res) => {
+  try {
+    const { uId} = req.params
+    const resultado = await usersServicesRep.postDocum(uId, req, res)
+    if(resultado){
+      res.send(resultado)
+    } else {
+      res.status(400).json(resultado)
+    }
+  } catch (error) {
+    res.status(400).json({message: `No podemos subir los archivos - ${error}`})
+  }
+}

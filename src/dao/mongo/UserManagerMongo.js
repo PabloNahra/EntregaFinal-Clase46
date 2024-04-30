@@ -58,7 +58,7 @@ export class UserManager {
 
   async postDocuments(uId, files) {
     try {
-      console.log("Dentro del Manager postDocuments")
+      console.log("Dentro del Manager postDocuments");
       // Chequear que el userID es un ObjectId
       const isValidObjectId = mongoose.Types.ObjectId.isValid(uId);
       if (!isValidObjectId) {
@@ -72,9 +72,37 @@ export class UserManager {
 
       // Subir archivos con Multer
       console.log("Subir MULTIPLES archivos con Multer");
-      console.log("const files en Manager")
-      console.log(files)
+      console.log("const files en Manager");
+      console.log(files);
+      // Recorrer el array de files e imprimir los valores; luego guardarlos en documents de user
+      files.forEach((file) => {
+        console.log("Originalname:", file.originalname);
+        console.log("Filename:", file.filename);
+        console.log("Path:", file.path);
+
+        // Verificar si el archivo ya está en la matriz documents del usuario
+        const existingDocumentIndex = user.documents.findIndex(
+          (doc) => doc.name === file.originalname
+        );
+
+        // Si el archivo no está en la matriz documents, lo insertamos
+        if (existingDocumentIndex === -1) {
+          const fileNameWithoutExtension = file.originalname.slice(0, file.originalname.lastIndexOf('.'));
+          user.documents.push({
+            name: fileNameWithoutExtension,
+            reference: file.path,
+          });
+        } else {
+          // Si el archivo ya existe, actualizamos la referencia
+          user.documents[existingDocumentIndex].reference = file.path;
+        }
+      });
       
+      // Guardar los cambios en el usuario
+      await user.save();
+
+      return { message: `Imagenes actualizadas` };
+
     } catch (error) {
       console.error(error);
       return { message: `No se pudieron subir los archivos - ${error}` };

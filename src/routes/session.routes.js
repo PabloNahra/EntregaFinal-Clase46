@@ -57,7 +57,6 @@ sessionRoutes.post(
 sessionRoutes.post('/logout', async (req, res) => {
     try {
         // Actualizar last_connection antes de que el login sea exitoso
-        console.log("dentro de logout")
         user.last_connection = new Date(); 
         await user.save(); 
 

@@ -3,7 +3,6 @@ import multer from "multer";
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
       let destinationFolder = 'public/img';
-      console.log(file.originalname)
       if (file.originalname.startsWith("profile")) {
         destinationFolder = "public/img/profiles";
       } else if (file.originalname.startsWith("product")){

@@ -5,11 +5,9 @@ import { checkRolUser } from "../middlewares/auth.js";
 const chatsRoutes = Router()
 
 chatsRoutes.post('/', checkRolUser, async (req, res) => {
-  console.log(req.body)
   try {
     const newMessage = req.body
     const added = await chatsModel.create(newMessage)
-    console.log("Mensaje creado")
     res.status(201).json({message: 'Mensaje creado exitosamente'})
   } catch (error) {
     console.error(error)

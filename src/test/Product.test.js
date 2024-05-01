@@ -17,6 +17,5 @@ describe('Testing de ProductDao', () => {
 
     it('El get debe devolver un arreglo', async function(){
         const result = await this.productDao.get()
-        console.log({result})
     })
 })

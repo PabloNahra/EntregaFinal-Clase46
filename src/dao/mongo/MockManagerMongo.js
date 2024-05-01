@@ -35,13 +35,8 @@ export class MockManager {
                         category: category,
                         thumbnail: fakerEs.image.url()
                     }
-                    console.log("product")
-                    console.log(product)
                     const newProduct = new ProductDTO(product)
-                    console.log("newProduct")
-                    console.log(newProduct)
                     const added = await productsModel.create(newProduct)
-                    console.log(added)
                 }
                 return {message: 'Mocks accionado'}
             }

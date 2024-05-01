@@ -12,8 +12,6 @@ export class SessionManager {
         try {
             //Revisar si el mail existe
             const user = await userModel.findOne({email: email})
-            console.log("user")
-            console.log(user)
             if(!user || user == null ){
                 return {message: `Usuario NO encontrado`}
             } else {
@@ -21,9 +19,6 @@ export class SessionManager {
                 const idLength = 20; // Longitud del ID
                 const randomBytes = crypto.randomBytes(Math.ceil(idLength / 2));
                 const id = randomBytes.toString('hex').slice(0, idLength);
-
-                console.log("id")
-                console.log(id)
 
                 // Guardar el ID y fecha en el user
                 user.recover_id = id
@@ -52,8 +47,6 @@ export class SessionManager {
 
     async recoverNewPass(rId, newPass){
         try {
-            console.log("en Sesion Manager rId")
-            console.log(rId)
             // Chequear que el rId exista para un usuario y tomar sus datos
             const user = await userModel.findOne({recover_id: rId})
             if(!user || user == null ){
@@ -61,15 +54,9 @@ export class SessionManager {
             } 
             
             // Validar que nueva PassWord no sea igual a la anterior; sino retornar aviso 
-            /*
-            console.log(user.password)
-            console.log(newPass)
-            console.log(newPassHash)
-            */
             const newPassHash = createHash(newPass)
             if (user.password != newPassHash){
                 // Modificar la clave
-                console.log("Clave nueva distinta")
                 user.password = newPassHash
                 user.save()
                 return {message: 'Password changed'}

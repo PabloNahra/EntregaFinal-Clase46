@@ -47,9 +47,6 @@ export const userRecoverNewPass = async (req, res) => {
   // ID de la recuperación de contraseña
   const { rId } = req.params
   const { newPass } = req.body
-  console.log("dentro de controler ID")
-  console.log(rId)
-  console.log(newPass)
   try {
     const resultado = await sessionsServicesRep.recoverNewPassRep(rId, newPass)
     if(resultado){

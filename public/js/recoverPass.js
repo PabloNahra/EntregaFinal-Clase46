@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Extraer el token de la URL
     const token = window.location.pathname.split('/').pop();    
-    console.log(token)
     tokenInput.value = token;
 
     // Manejar el envío del formulario
@@ -12,8 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault(); // Prevenir el comportamiento predeterminado del formulario
 
         const newPassword = document.getElementById('newPasswordInput').value;
-        console.log(newPassword)
-
         try {
             const response = await fetch(`http://localhost:8080/api/session/recoverpass/${token}`, {
                 method: 'POST',

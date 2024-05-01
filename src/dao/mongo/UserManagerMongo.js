@@ -49,7 +49,6 @@ export class UserManager {
 
       // Si lo vamos a pasar de PREMIUM A USER
       if (userRole === "PREMIUM") {
-        console.log("PREMIUM A USER");
         let newRole = userRole === "USER" ? "PREMIUM" : "USER"; // Cambio de rol
         const updateUserRole = await userModel.updateOne(
           { _id: uId },
@@ -66,7 +65,6 @@ export class UserManager {
         (user.role.toUpperCase() === "USER") &
         allValuesPresent === true
       ) {
-        console.log("USER A PREMIUM");
         let newRole = userRole === "USER" ? "PREMIUM" : "USER"; // Cambio de rol
         const updateUserRole = await userModel.updateOne(
           { _id: uId },
@@ -78,8 +76,14 @@ export class UserManager {
             message: `Rol modificado - User: ${user.email} - Nuevo Rol: ${newRole}`,
           };
         }
-      } else {
-        console.log("NO MODIFICABLE");
+      } else if (
+        // Si vamos a pasar de USER A PREMIUM y no tiene la documentación
+        (user.role.toUpperCase() === "USER") &
+        allValuesPresent === false
+      ) {
+        return { message: "El usuario NO ha procesado toda su documentación" };
+      }
+      else {
         return { message: "El rol del usuario NO es modificable" };
       }
     } catch (error) {

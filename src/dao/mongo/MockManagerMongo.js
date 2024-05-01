@@ -24,7 +24,6 @@ export class MockManager {
             //const added = await productsModel.create(product)
             if (cant) {
                 for(let i=0; i <cant; i++){
-                    console.log(i)
                     let category = Math.random() < 0.5 ? 'casa' : 'bebe'; // Decide aleatoriamente entre 'casa' y 'bebe'
                     let product = {
                         title: fakerEs.commerce.productName(),

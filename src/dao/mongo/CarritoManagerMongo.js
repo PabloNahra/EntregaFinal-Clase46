@@ -42,7 +42,6 @@ export class CartManager {
 
       // Si el usuario es Premium, controlar que ningun producto sea de él
       if (user.role.toUpperCase() === "PREMIUM") {
-        console.log("user premium");
         // Validar que ningún producto en el carrito pertenezca al usuario
         for (const item of cart.products) {
           const productId = item.product;
@@ -163,14 +162,11 @@ export class CartManager {
       if (user.role.toUpperCase() === "PREMIUM") {
         // Validar que ningún producto en el carrito pertenezca al usuario
         for (const item of cart.products) {
-          console.log(item)
           const productId = item.product;
 
           // Consultar el producto en la base de datos
           const product = await productsModel.findById(productId);
-          console.log(product)
           if (product && product.owner && product.owner === user.email) {
-            console.log("es prd premium")
             return { message: "Revise los productos. Un usuario Premium NO puede agregar productos que le pertenecen" };
           }
         }

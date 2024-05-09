@@ -41,3 +41,16 @@ export const postDoc = async (req, res) => {
     res.status(400).json({message: `No podemos subir los archivos - ${error}`})
   }
 }
+
+export const deleteUsersInactive = async (req, res) => {
+  try {
+    const resultado = await usersServicesRep.deleteUsersInac()
+    if(resultado){
+      res.send(resultado)
+    } else {
+      res.status(400).json(resultado)
+    }
+  } catch (error) {
+    res.status(400).json({message: `No podemos eliminar los usuarios inactivos - ${error}`})
+  }
+}

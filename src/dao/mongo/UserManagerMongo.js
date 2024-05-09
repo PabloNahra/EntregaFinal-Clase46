@@ -1,7 +1,7 @@
-import { userModel } from "../../models/user.model.js"
+import { userModel } from "../../models/user.model.js";
 import mongoose from "mongoose";
-import { uploader } from "../../utils/multer.js";
-
+import UsersAllDTO from "../../dtos/usersAll.dto.js";
+import MailingService from "../../services/mailing.js";
 
 export class UserManager {
   constructor(path) {
@@ -11,7 +11,11 @@ export class UserManager {
   async get() {
     try {
       const users = await userModel.find();
-      return { users };
+      //const usersAll = new UsersAllDTO(users)
+      // Mapear cada usuario a UsersAllDTO
+      const usersAll = users.map((user) => new UsersAllDTO(user));
+      //console.log(usersAll)
+      return { usersAll };
     } catch (error) {
       console.error(error);
       return { message: `No podemos devolver los usuarios - ${error}` };
@@ -36,7 +40,9 @@ export class UserManager {
       let allValuesPresent = true;
 
       for (const val of requiredValues) {
-        if (!user.documents.some(doc => doc.name.toUpperCase().includes(val))) {
+        if (
+          !user.documents.some((doc) => doc.name.toUpperCase().includes(val))
+        ) {
           allValuesPresent = false;
           break;
         }
@@ -62,7 +68,7 @@ export class UserManager {
       } else if (
         // Si vamos a pasar de USER A PREMIUM
         (user.role.toUpperCase() === "USER") &
-        allValuesPresent === true
+        (allValuesPresent === true)
       ) {
         let newRole = userRole === "USER" ? "PREMIUM" : "USER"; // Cambio de rol
         const updateUserRole = await userModel.updateOne(
@@ -78,11 +84,10 @@ export class UserManager {
       } else if (
         // Si vamos a pasar de USER A PREMIUM y no tiene la documentación
         (user.role.toUpperCase() === "USER") &
-        allValuesPresent === false
+        (allValuesPresent === false)
       ) {
         return { message: "El usuario NO ha procesado toda su documentación" };
-      }
-      else {
+      } else {
         return { message: "El rol del usuario NO es modificable" };
       }
     } catch (error) {
@@ -114,7 +119,10 @@ export class UserManager {
 
         // Si el archivo no está en la matriz documents, lo insertamos
         if (existingDocumentIndex === -1) {
-          const fileNameWithoutExtension = file.originalname.slice(0, file.originalname.lastIndexOf('.'));
+          const fileNameWithoutExtension = file.originalname.slice(
+            0,
+            file.originalname.lastIndexOf(".")
+          );
           user.documents.push({
             name: fileNameWithoutExtension,
             reference: file.path,
@@ -124,18 +132,62 @@ export class UserManager {
           user.documents[existingDocumentIndex].reference = file.path;
         }
       });
-      
+
       // Guardar los cambios en el usuario
       await user.save();
 
       return { message: `Imagenes actualizadas` };
-
     } catch (error) {
       console.error(error);
       return { message: `No se pudieron subir los archivos - ${error}` };
     }
   }
+
+  async deleteUsersByDate() {
+    try {
+      const users = await userModel.find();
+
+      // Calcular la fecha actual menos 30 minutos o 2 dias (2880 minutos)
+      const cutoffDate = new Date();
+      cutoffDate.setMinutes(cutoffDate.getMinutes() - 2880);
+      console.log(cutoffDate);
+
+      // Filtrar los usuarios cuya última conexión sea más antigua que cutoffDate
+      const usersInactives = users.filter(
+        (user) => new Date(user.last_connection) < cutoffDate
+      );
+
+      // Obtener solo los _id de los usuarios inactivos
+      const usersInactivesData = usersInactives.map((user) => ({
+        _id: user._id,
+        email: user.email,
+      }));
+
+      // Recorrer el array usersInactivesData
+      for (const user of usersInactivesData) {
+        // Aviso por baja de usuario
+        const mailingService = new MailingService();
+        await mailingService.sendSimpleMail({
+          from: "Coder e-commerce",
+          to: user.email,
+          subject: "Coder Backend - e-commerce - Baja de usuario",
+          html: `
+                        <h1>Importante</h1>
+                        <h2>Su usuario a sido eliminado de nuestro 
+                        e-commerce por inactividad</h2>
+                    `,
+        });
+
+        // Elimino el usuario
+        await userModel.deleteOne({_id: user._id})
+      }
+
+      return { message: `Eliminamos los usuarios inactivos`  };
+    } catch (error) {
+      console.error(error);
+      return { message: `No podemos eliminar los usuarios - ${error}` };
+    }
+  }
 }
 
-
-export default UserManager
+export default UserManager;

@@ -20,5 +20,10 @@ export default class UserRepository {
         const result = await this.dao.postDocuments(uId, files)
         return result
     }
+
+    deleteUsersInac = async() => {
+        const result = await this.dao.deleteUsersByDate()
+        return result
+    }
     
 }

@@ -49,4 +49,8 @@ viewsRoutes.get('/recoverpass/:rId', (req, res) => {
   res.render('recoverpass')
 })
 
+viewsRoutes.get('/manage_users', (req, res) => {
+  res.render('manage_users')
+})
+
 export default viewsRoutes

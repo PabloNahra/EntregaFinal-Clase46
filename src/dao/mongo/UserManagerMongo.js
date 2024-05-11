@@ -1,6 +1,7 @@
 import { userModel } from "../../models/user.model.js";
 import mongoose from "mongoose";
 import UsersAllDTO from "../../dtos/usersAll.dto.js";
+import UserByEmailDTO from "../../dtos/userByEmail.dto.js";
 import MailingService from "../../services/mailing.js";
 
 export class UserManager {
@@ -22,6 +23,23 @@ export class UserManager {
     }
   }
 
+  async getByEmail(email) {
+    try {
+      console.log("Dentro de getByEmail")
+        const user = await userModel.findOne({ email: email });
+        if (user) {
+            const userByEmailDTO = new UserByEmailDTO(user);
+            console.log("Dentro de getByEmail userByEmailDTO")
+            console.log(userByEmailDTO)
+            return { userByEmailDTO };
+        } else {
+            return { message: 'Usuario no encontrado' };
+        }
+    } catch (error) {
+        console.error(error);
+        return { message: `No podemos devolver el usuario - ${error}` };
+    }
+}
   async changeRole(uId) {
     try {
       // Chequear que el userID es un ObjectId
@@ -63,6 +81,7 @@ export class UserManager {
         if (updateUserRole.modifiedCount > 0) {
           return {
             message: `Rol modificado - User: ${user.email} - Nuevo Rol: ${newRole}`,
+            status: 201
           };
         }
       } else if (
@@ -86,7 +105,10 @@ export class UserManager {
         (user.role.toUpperCase() === "USER") &
         (allValuesPresent === false)
       ) {
-        return { message: "El usuario NO ha procesado toda su documentación" };
+        console.log("Change Rol NO tiene la doc")
+        return { 
+          message: "El usuario NO ha procesado toda su documentación", 
+          status: 400 };
       } else {
         return { message: "El rol del usuario NO es modificable" };
       }
@@ -179,10 +201,10 @@ export class UserManager {
         });
 
         // Elimino el usuario
-        await userModel.deleteOne({_id: user._id})
+        await userModel.deleteOne({ _id: user._id });
       }
 
-      return { message: `Eliminamos los usuarios inactivos`  };
+      return { message: `Eliminamos los usuarios inactivos` };
     } catch (error) {
       console.error(error);
       return { message: `No podemos eliminar los usuarios - ${error}` };

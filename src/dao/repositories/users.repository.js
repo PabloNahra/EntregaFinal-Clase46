@@ -10,9 +10,17 @@ export default class UserRepository {
         const result = await this.dao.get()
         return result
     }
+
+    getUserByEmailRep = async(email) => {
+        const result = await this.dao.getByEmail(email)
+        return result
+    }
+    
     
     changeRoleRep = async(uId) => {
         const result = await this.dao.changeRole(uId)
+        console.log("result en changeRoleRep")
+        console.log(result)
         return result
     }
 
@@ -26,4 +34,11 @@ export default class UserRepository {
         return result
     }
     
+    /*
+    manageUserRep = async(uId) => {
+        const result = await this.dao.manageUser(uId)
+        return result
+    } 
+    */   
+
 }

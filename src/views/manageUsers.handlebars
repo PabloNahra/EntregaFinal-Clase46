@@ -1,0 +1,24 @@
+<h1>Administración de Usuarios</h1>
+
+{{!<form action="/api/session/login" method="post">}}
+<form id="modifyRoleForm" method="post"> 
+    <label for="emailInput">Email: </label>
+    <select name="email" id="emailInput"></select><br><br>
+    <label for="">Nombre: </label><input type="text" name="first_name"><br><br>
+    <label for="">Apellido: </label><input type="text" name="last_name"><br><br>
+    {{!<label for="">Rol: </label><input type="text" name="role"><br><br>}}
+    <label for="">Rol: </label>
+    <select name="role" id="roleInput">
+        <option value="ADMIN">ADMIN</option>
+        <option value="USER">USER</option>
+        <option value="PREMIUM">PREMIUM</option>
+        <option value="OTRO">OTRO</option>
+    </select>
+    <br><br>
+    <button type="submit">Modificar Rol (USER/PREMIUM)</button>
+    <button type="button" id="restoreBtn">Modificar Password</button>
+</form>
+
+<h5 id="resultMessage"></h5>
+
+<script src="js/manageUsers.js"></script>

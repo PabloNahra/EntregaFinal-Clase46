@@ -17,8 +17,10 @@ export const changeRole = async (req, res) => {
   try {
     const { uId } = req.params
     const resultado = await usersServicesRep.changeRoleRep(uId)
-    if(resultado){
-      res.send(resultado)
+    console.log("Dentro del changeRole: resultado")
+    console.log(resultado)
+    if(resultado.status === 200 || resultado.status === 201){
+      res.status(201).send(resultado)
     } else {
       res.status(400).json(resultado)
     }
@@ -54,3 +56,34 @@ export const deleteUsersInactive = async (req, res) => {
     res.status(400).json({message: `No podemos eliminar los usuarios inactivos - ${error}`})
   }
 }
+
+
+export const getUserByEmail = async (req, res) => {
+  try {
+    const { email } = req.params
+    const resultado = await usersServicesRep.getUserByEmailRep(email)
+    if(resultado){
+      res.send(resultado)
+    } else {
+      res.status(400).json(resultado)
+    }
+  } catch (error) {
+    res.status(400).json({message: `No podemos devolver los usuarios - ${error}`})
+  }
+}
+
+/*
+export const manageUser = async (req, res) => {
+  try {
+    const { uId } = req.params
+    const resultado = await usersServicesRep.manageUserRep(uId)
+    if(resultado){
+      res.send(resultado)
+    } else {
+      res.status(400).json(resultado)
+    }
+  } catch (error) {
+    res.status(400).json({message: `No se pudo modificar los datos del usuario - ${error}`})
+  }
+}
+*/

@@ -4,11 +4,11 @@
 <form id="modifyRoleForm" method="post"> 
     <label for="emailInput">Email: </label>
     <select name="email" id="emailInput"></select><br><br>
-    <label for="">Nombre: </label><input type="text" name="first_name"><br><br>
-    <label for="">Apellido: </label><input type="text" name="last_name"><br><br>
+    <label for="">Nombre: </label><input type="text" name="first_name" readonly><br><br>
+    <label for="">Apellido: </label><input type="text" name="last_name" readonly><br><br>
     {{!<label for="">Rol: </label><input type="text" name="role"><br><br>}}
     <label for="">Rol: </label>
-    <select name="role" id="roleInput">
+    <select name="role" id="roleInput" disabled>
         <option value="ADMIN">ADMIN</option>
         <option value="USER">USER</option>
         <option value="PREMIUM">PREMIUM</option>

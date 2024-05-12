@@ -22,7 +22,7 @@ export const changeRole = async (req, res) => {
     if(resultado.status === 200 || resultado.status === 201){
       res.status(201).send(resultado)
     } else {
-      res.status(400).json(resultado)
+      res.status(403).json(resultado)
     }
   } catch (error) {
     res.status(400).json({message: `No se pudo modificar el rol del usuario - ${error}`})

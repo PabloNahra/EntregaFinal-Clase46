@@ -98,6 +98,7 @@ export class UserManager {
         if (updateUserRole.modifiedCount > 0) {
           return {
             message: `Rol modificado - User: ${user.email} - Nuevo Rol: ${newRole}`,
+            status: 201
           };
         }
       } else if (
@@ -108,9 +109,10 @@ export class UserManager {
         console.log("Change Rol NO tiene la doc")
         return { 
           message: "El usuario NO ha procesado toda su documentación", 
-          status: 400 };
+          status: 403 };
       } else {
-        return { message: "El rol del usuario NO es modificable" };
+        return { message: "El rol del usuario NO es modificable", 
+        status: 403 };
       }
     } catch (error) {
       console.error(error);

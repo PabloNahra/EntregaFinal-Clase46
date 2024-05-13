@@ -1,5 +1,6 @@
 const restoreBtn = document.getElementById("restoreBtn");
-const recuperarBtn = document.getElementById("recuperarBtn");
+// const recuperarBtn = document.getElementById("recuperarBtn");
+const deleteBtn = document.getElementById("deleteBtn");
 const emailInput = document.getElementById("emailInput");
 const passwordInput = document.getElementById("passwordInput");
 const resultMessage = document.getElementById("resultMessage");
@@ -8,7 +9,6 @@ window.addEventListener("DOMContentLoaded", async () => {
   const emailInput = document.getElementById("emailInput");
   const firstNameInput = document.querySelector('input[name="first_name"]');
   const lastNameInput = document.querySelector('input[name="last_name"]');
-  // const roleNameInput = document.querySelector('input[name="role"]');
   const roleInput = document.getElementById("roleInput");
   const resultMessage = document.getElementById("resultMessage");
   const modifyRoleForm = document.getElementById("modifyRoleForm");
@@ -151,5 +151,53 @@ window.addEventListener("DOMContentLoaded", async () => {
     console.error(error);
     resultMessage.textContent =
       "Error al cargar la lista de correos electrónicos 2";
+  }
+});
+
+deleteBtn.addEventListener("click", async () => {
+  try {
+    // Obtener el correo electrónico seleccionado
+    const selectedEmail = emailInput.value;
+
+    // Consultar el servicio para obtener los datos a partir del correo electrónico
+    const userResponse = await fetch(
+      `http://localhost:8080/api/users/getByEmail/${selectedEmail}`
+    );
+    const userData = await userResponse.json();
+
+    if (userResponse.ok) {
+      // Obtener el id del usuario
+      const userId = userData.userByEmailDTO.user_id;
+
+      // Realizar la solicitud para eliminar al usuario por su id
+      const deleteUserResponse = await fetch(
+        `http://localhost:8080/api/users/delete/${userId}`,
+        {
+          method: "DELETE",
+        }
+      );
+
+      if (deleteUserResponse.ok) {
+        // Limpiar el mensaje anterior
+        resultMessage.textContent = "";
+
+        // Actualizar la interfaz o mostrar un mensaje de éxito
+        resultMessage.textContent = "Usuario eliminado correctamente";
+
+        // Refrescar la página después de 3 segundos
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
+      } else {
+        // Manejar el error de eliminación de usuario
+        resultMessage.textContent = "Error al eliminar usuario";
+      }
+    } else {
+      // Manejar el error de obtener el usuario por correo electrónico
+      resultMessage.textContent = "Error al obtener el usuario";
+    }
+  } catch (error) {
+    console.error(error);
+    resultMessage.textContent = "Error inesperado";
   }
 });

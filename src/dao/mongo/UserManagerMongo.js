@@ -212,6 +212,21 @@ export class UserManager {
       return { message: `No podemos eliminar los usuarios - ${error}` };
     }
   }
+
+  async deleteUser(uId) {
+    try {
+      const userDeleted = await userModel.deleteOne({ _id: uId });
+
+      if(userDeleted.deletedCount > 0){
+        return {message: `Usuario eliminado correctamente - Id: ${uId}`}
+      } else {
+          return {message: `Usuario NO encontrado - Id: ${uId}`}
+      }
+    } catch (error) {
+      console.error(error);
+      return { message: `Error - No podemos eliminar al usuario - ${error}` };
+    }
+  }
 }
 
 export default UserManager;

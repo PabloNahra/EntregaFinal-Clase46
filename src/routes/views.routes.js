@@ -1,6 +1,6 @@
 import { Router } from "express";
 import ProdManager from "../dao/mongo/ProductManagerMongo.js";
-import { checkAuth, checkExistingUser } from "../middlewares/auth.js";
+import { checkAuth, checkExistingUser, applyPolicies } from "../middlewares/auth.js";
 
 
 const viewsRoutes = Router()
@@ -49,7 +49,7 @@ viewsRoutes.get('/recoverpass/:rId', (req, res) => {
   res.render('recoverpass')
 })
 
-viewsRoutes.get('/manageUsers', (req, res) => {
+viewsRoutes.get('/manageUsers', applyPolicies(['ADMIN']), (req, res) => {
   res.render('manageUsers')
 })
 

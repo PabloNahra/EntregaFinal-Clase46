@@ -19,8 +19,6 @@ export default class UserRepository {
     
     changeRoleRep = async(uId) => {
         const result = await this.dao.changeRole(uId)
-        console.log("result en changeRoleRep")
-        console.log(result)
         return result
     }
 
@@ -34,11 +32,9 @@ export default class UserRepository {
         return result
     }
     
-    /*
-    manageUserRep = async(uId) => {
-        const result = await this.dao.manageUser(uId)
+    deleteUserRep = async(uId) => {
+        const result = await this.dao.deleteUser(uId)
         return result
     } 
-    */   
 
 }

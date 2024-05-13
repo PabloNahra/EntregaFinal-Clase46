@@ -17,8 +17,6 @@ export const changeRole = async (req, res) => {
   try {
     const { uId } = req.params
     const resultado = await usersServicesRep.changeRoleRep(uId)
-    console.log("Dentro del changeRole: resultado")
-    console.log(resultado)
     if(resultado.status === 200 || resultado.status === 201){
       res.status(201).send(resultado)
     } else {
@@ -72,18 +70,17 @@ export const getUserByEmail = async (req, res) => {
   }
 }
 
-/*
-export const manageUser = async (req, res) => {
+
+export const deleteUser = async (req, res) => {
+  const { uId } = req.params
   try {
-    const { uId } = req.params
-    const resultado = await usersServicesRep.manageUserRep(uId)
+    const resultado = await usersServicesRep.deleteUserRep(uId)
     if(resultado){
       res.send(resultado)
     } else {
       res.status(400).json(resultado)
     }
   } catch (error) {
-    res.status(400).json({message: `No se pudo modificar los datos del usuario - ${error}`})
+    res.status(400).json({message: `No podemos eliminar al usuario - ${error}`})
   }
 }
-*/

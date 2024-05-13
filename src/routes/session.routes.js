@@ -60,13 +60,9 @@ sessionRoutes.post(
 
 sessionRoutes.post("/logout", async (req, res) => {
   try {
-    // Actualizar last_connection antes de que el login sea exitoso
-    console.log("Dentro de logout");
-    console.log(req.session.user);
+    // Actualizar last_connection antes de que el logout sea exitoso
     const dateConnection = new Date();
-    console.log(dateConnection)
-    // await user.save();
-    const updateUserLastConnection = await userModel.updateOne(
+    await userModel.updateOne(
       { email: req.session.user.email },
       { $set: { last_connection: dateConnection } }
     );
@@ -77,7 +73,6 @@ sessionRoutes.post("/logout", async (req, res) => {
       }
       res.send({ redirect: "http://localhost:8080/login" });
     });
-    // res.redirect('/login')
   } catch (error) {
     res.status(400).send({ error });
   }

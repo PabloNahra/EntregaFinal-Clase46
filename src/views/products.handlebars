@@ -1,3 +1,12 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestros Productos</title>
+    <link rel="stylesheet" href="css/products.css"> 
+</head>
+<body>
+
 <div>
     <h1>Nuestros Productos</h1>
     <h2>Bienvenid@ {{user.first_name}} {{user.last_name}}</h2>
@@ -6,6 +15,7 @@
         <div class="product-item">
             <p>Id: {{this._id}}</p>
             <p>Titulo: {{this.title}}</p>
+            <img src="{{this.thumbnail.[0]}}" alt="Imagen del producto" class="product-image">
             <p>Descripcion: {{this.description}}</p>
             <p>Codigo: {{this.code}}</p>
             <p>Precio: $ {{this.price}}</p>
@@ -18,12 +28,12 @@
     {{/each}}
 </div>
 
-{{#if hasPrevPage}}
-    <button><a href="/products?page={{prevPage}}">Anterior</a></button>
+{{#if products.hasPrevPage}}
+    <button><a href="/products?page={{products.prevPage}}">Anterior</a></button>
 {{/if}}
 
-{{#if hasNextPage}}
-    <button><a href="/products?page={{nextPage}}">Siguiente</a></button>
+{{#if products.hasNextPage}}
+    <button><a href="/products?page={{products.nextPage}}">Siguiente</a></button>
 {{/if}}
 
 <script src="js/products.js"></script>

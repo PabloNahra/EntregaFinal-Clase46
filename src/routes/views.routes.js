@@ -30,9 +30,6 @@ viewsRoutes.get('/products', checkAuth, async (req, res) => {
     const { user } = req.session
     const products = await prodManager.get(10, page);
 
-    console.log("en viewRoutes")
-    console.log(products)
-
     res.render('products', { user, products });
   } catch (error) {
     res.status(500).send('Error interno del servidor');

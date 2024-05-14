@@ -50,7 +50,7 @@ export const checkRolAdmin = (req, res, next) => {
 }
 
 export const checkRolUser = (req, res, next) => {
-    if(req.session.user.role === "user"){
+    if(req.session.user.role.toUpperCase() === "USER"){
         next()
     } else {
         return res.status(401).send({message: 'Unauthorized'})

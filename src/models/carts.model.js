@@ -3,6 +3,12 @@ import mongoose from "mongoose";
 const cartsCollection = 'carts'
 
 const cartsSchema = mongoose.Schema({
+    user_id: {
+        type: mongoose.Schema.ObjectId,
+        required: false,
+        ref: 'users', 
+        default: null
+    },
     products: {
         type: [
             {
@@ -15,6 +21,15 @@ const cartsSchema = mongoose.Schema({
             }
         ],
         default: []
+    },
+    status: {
+        type: String,
+        require: false,
+        default: null
+    },
+    last_update: {
+        type: Date,
+        default: Date.now
     } 
 });
 

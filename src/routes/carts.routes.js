@@ -14,7 +14,6 @@ cartsRoutes.get('/:cId', getCartsById) // Doc
 // El premium NO puede agregar productos que le pertenecen
 cartsRoutes.post('/', postCart) // Doc
 
-
 // Borrar un producto de un carrito puntual
 cartsRoutes.delete('/:cId/products/:pId', deleteCartById) // Doc
 
@@ -26,7 +25,7 @@ cartsRoutes.put('/:cId/products/:pId', applyPolicies(['USER', 'PREMIUM']), putPr
 
 cartsRoutes.delete('/:cId', deleteProductsInCart) // Doc
 
-cartsRoutes.post("/:cId/product/:pId",  checkRolUser, postProductsInCart) // Doc
+cartsRoutes.post("/:cId/product/:pId",  applyPolicies(['USER', 'PREMIUM']), postProductsInCart) // Doc
 
 // Finalizar el proceso de compra
 cartsRoutes.post('/:cId/purchase',  confirmCart) // Doc

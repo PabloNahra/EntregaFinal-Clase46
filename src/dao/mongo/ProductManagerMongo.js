@@ -20,8 +20,6 @@ export class ProdManager {
         }
       );
       parseProducts.payload = parseProducts.docs;
-      console.log(parseProducts)
-      console.log(parseProducts.hasNextPage)
       delete parseProducts.docs;
       return { message: "OK", ...parseProducts };
     } catch (error) {

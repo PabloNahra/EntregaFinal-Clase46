@@ -1,8 +1,9 @@
 import { Router } from "express";
 import { getCarts, getCartsById, 
-  postCart,deleteCartById, 
+  postCart, deleteCartById, 
   putCartById, putProductsInCart, 
-  deleteProductsInCart, postProductsInCart, confirmCart } from "../controllers/carts.controller.js";
+  deleteProductsInCart, postProductsInCart, 
+  confirmCart, getCartsByUserEmail } from "../controllers/carts.controller.js";
 import { applyPolicies, checkRolUser } from "../middlewares/auth.js";
 
 const cartsRoutes = Router()
@@ -10,6 +11,8 @@ const cartsRoutes = Router()
 cartsRoutes.get('/', getCarts) // Doc 
 
 cartsRoutes.get('/:cId', getCartsById) // Doc
+
+cartsRoutes.get('/user_email/:uEmail', getCartsByUserEmail)
 
 // El premium NO puede agregar productos que le pertenecen
 cartsRoutes.post('/', postCart) // Doc

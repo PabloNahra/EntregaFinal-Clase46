@@ -17,6 +17,11 @@ export default class CartRepository {
         return result
     }
 
+    getCartByUserEmailRep = async(uEmail) => {
+        const result = await this.dao.getCartByUserEmail(uEmail)
+        return result
+    }
+
     createCartRep = async (cart, user) => {
         const newCart = cart //new CartDTO(cart)
         const result = await this.dao.addCart(newCart, user)

@@ -61,6 +61,21 @@ export const getCartsById = async (req, res) => {
   }
 }
 
+export const getCartsByUserEmail = async (req, res) => {
+  try {
+    const { uEmail } = req.params
+    const resultado = await cartsServicesRep.getCartByUserEmailRep(uEmail)
+    if(resultado){
+      res.send(resultado)
+    } else {
+      res.status(400).json(resultado)
+    }
+  } catch (error) {
+    console.error(error)
+    res.status(400).json({message: `No podemos devolver el carrito para el email de usuario ${uEmail} - ${error}`})
+  }
+}
+
 export const postCart = async (req, res) => {
   try {
     const newCart = req.body

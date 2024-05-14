@@ -6,6 +6,7 @@ import ProductDTO from "../../dtos/product.dto.js";
 import { TicketManager } from "../mongo/TicketManagerMongo.js"; 
 import TicketDTO from '../../dtos/ticket.dto.js';
 import { productsModel } from '../../models/products.model.js';
+import { userModel } from '../../models/user.model.js';
 
 
 const prodManager = new ProdManager(); 
@@ -155,6 +156,33 @@ export class CartManager {
       return { message: "ERROR", rdo: "Error" };
     }
   }
+
+  async getCartByUserEmail(uEmail) {
+    try {
+      console.log("uEmail en DAO")
+      console.log(uEmail)
+      
+      // Busco el id del user por el email
+      const userId = await userModel.findOne({email: uEmail}).select('_id')
+      
+      // Busco los carritos por Id e User
+      const carts = await cartsModel.find({user_id: userId})
+      
+      if (carts) {
+        return { message: "OK", rdo: carts, status: 201 };
+      } else {
+        return {
+          message: "ERROR",
+          rdo: "El usuario no posee carritos",
+          status: 403
+        };
+      }
+    } catch (error) {
+      console.error(error);
+      return { message: "ERROR", rdo: "Error" };
+    }
+  }
+
 
   async updateCart(cId, cart, user) {
     try {

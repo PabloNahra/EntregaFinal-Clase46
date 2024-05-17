@@ -2,11 +2,91 @@ const userDataDiv = document.getElementById("user-data");
 const firstName = userDataDiv.dataset.firstName;
 const lastName = userDataDiv.dataset.lastName;
 const uEmail = userDataDiv.dataset.email;
-const id = userDataDiv.dataset.id;
+
+
+/*
+document.addEventListener("DOMContentLoaded", () => {
+  // cargo el id del carrito en el boton de Ir a Carrito (ultimo carrito de compra activo del usuario)
+  // Valor fijo de cId para inicialización
+  const fixedCId = "1";
+
+  let ultCart;
+  const userCarts = await fetch(`http://localhost:8080/api/carts/user_email/${uEmail}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (userCarts.ok) {
+    const responseData = await userCarts.json();
+    const carritos = responseData.rdo;
+
+    const filteredCarts = carritos.filter((cart) => {
+      const status = cart.status ? cart.status.toUpperCase() : null;
+      return status !== "FINALIZADO" && status !== "CANCELADO";
+    });
+    filteredCarts.sort((a, b) => new Date(b.last_connection) - new Date(a.last_connection));
+
+    if (filteredCarts.length > 0) {
+      ultCart = filteredCarts[0];
+      // Obtengo el ultimo id de carrito
+      fixedCId = ultCart._id
+    } else {
+      ultCart = null;
+    }
+  }
+      
+      const cartLink = document.getElementById("cart-link");
+      cartLink.href = `/cart/${fixedCId}`;
+});
+*/
+
+document.addEventListener("DOMContentLoaded", async () => {
+  // Valor fijo de cId para inicialización
+  let fixedCId = "1"; // Definido como let para poder reasignarlo
+
+  const userDataDiv = document.getElementById("user-data");
+  const uEmail = userDataDiv.dataset.email;
+
+  try {
+    let ultCart;
+    const userCarts = await fetch(`http://localhost:8080/api/carts/user_email/${uEmail}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (userCarts.ok) {
+      const responseData = await userCarts.json();
+      const carritos = responseData.rdo;
+
+      const filteredCarts = carritos.filter((cart) => {
+        const status = cart.status ? cart.status.toUpperCase() : null;
+        return status !== "FINALIZADO" && status !== "CANCELADO";
+      });
+      filteredCarts.sort((a, b) => new Date(b.last_connection) - new Date(a.last_connection));
+
+      if (filteredCarts.length > 0) {
+        ultCart = filteredCarts[0];
+        // Obtengo el último id de carrito
+        fixedCId = ultCart._id;
+      } else {
+        ultCart = null;
+      }
+    }
+
+    const cartLink = document.getElementById("cart-link");
+    cartLink.href = `/cart/${fixedCId}`;
+  } catch (error) {
+    console.error("Error fetching user carts:", error);
+  }
+});
 
 const addToCartBtns = document.getElementsByClassName("add-to-cart-btn");
 for (let btn of addToCartBtns) {
-  btn.addEventListener("click", (event) => {
+  btn.addEventListener("click", () => {
     addProductToCart(btn.id);
   });
 }
@@ -14,97 +94,71 @@ for (let btn of addToCartBtns) {
 const addProductToCart = async (pId) => {
   try {
     let ultCart;
-    // Buscar si el usuario tiene un cId activo (ultimo sin status finalizado)
-    const userCarts = await fetch(
-      `http://localhost:8080/api/carts/user_email/${uEmail}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const userCarts = await fetch(`http://localhost:8080/api/carts/user_email/${uEmail}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
     if (userCarts.ok) {
       const responseData = await userCarts.json();
       const carritos = responseData.rdo;
-      // Filtrar carritos por estado y ordenar por last_connection
+
       const filteredCarts = carritos.filter((cart) => {
         const status = cart.status ? cart.status.toUpperCase() : null;
         return status !== "FINALIZADO" && status !== "CANCELADO";
       });
-      filteredCarts.sort(
-        (a, b) => new Date(b.last_connection) - new Date(a.last_connection)
-      );
+      filteredCarts.sort((a, b) => new Date(b.last_connection) - new Date(a.last_connection));
 
-      // Tomar el carrito más reciente si hay alguno después de filtrar y ordenar
-      //      let ultCart
       if (filteredCarts.length > 0) {
         ultCart = filteredCarts[0];
       } else {
-        ultCart = null; // Si no hay carritos después de filtrar y ordenar
+        ultCart = null;
       }
     }
+
     if (ultCart) {
-      // Verificar si el producto ya existe en ese carrito
-      const existeProducto = ultCart.products.some(
-        (producto) => producto.product === pId
+      const existeProducto = ultCart.products.some((producto) => producto.product === pId);
+
+      const result = await fetch(
+        `http://localhost:8080/api/carts/${ultCart._id}/product/${pId}`,
+        {
+          body: JSON.stringify({ quantity: 1 }),
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
 
-      if (existeProducto) {
-        // Si ya existe, agregarle una unidad, o realizar cualquier otra acción que necesites
-        // Si no existe agregar el producto
-        const result = await fetch(
-          `http://localhost:8080/api/carts/${ultCart._id}/product/${pId}`,
-          {
-            body: JSON.stringify({
-              quantity: 1,
-            }),
-            method: "post",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        if (result.status === 200 || result.status === 201) {
-          alert("Se agregó correctamente");
-        } else {
-          alert("Error, no se pudo agregar");
-        }
+      if (result.status === 200 || result.status === 201) {
+        alert("Se agregó correctamente");
+        /*
+        const cartLink = document.getElementById("cart-link");
+        cartLink.href = `/cart/${ultCart._id}`;
+        */
       } else {
-        // Si no existe, agregar el producto al carrito
-        const result = await fetch(
-          `http://localhost:8080/api/carts/${ultCart._id}/product/${pId}`,
-          {
-            body: JSON.stringify({
-              quantity: 1,
-            }),
-            method: "post",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        if (result.status === 200 || result.status === 201) {
-          alert("Se agregó correctamente");
-        } else {
-          alert("Error, no se pudo agregar");
-        }
+        alert("Error, no se pudo agregar");
       }
     } else {
-      // Generar un nuevo carrito con el producto
       const result = await fetch(`http://localhost:8080/api/carts`, {
         body: JSON.stringify({
-          // user_id: "664171d632e9089c3a2cb2c3",
-          products : [{product: pId, "quantity": 1}]
+          products: [{ product: pId, quantity: 1 }],
         }),
-        method: "post",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
       });
+
       if (result.status === 200 || result.status === 201) {
+        const newCart = await result.json();
         alert("Se agregó correctamente");
+        /*
+        const cartLink = document.getElementById("cart-link");
+        cartLink.href = `/cart/${newCart._id}`;
+        */
       } else {
         alert("Error, no se pudo agregar");
       }

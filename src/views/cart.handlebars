@@ -1,38 +1,55 @@
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tu Carrito de Compras</title>
-    <link rel="stylesheet" href="css/cart.css"> 
-</head>
-<body>
+    <link rel="stylesheet" href="css/cart.css" />
+  </head>
+  <body>
 
-<h1>Tu Carrito de Compras</h1>
+    <h1>Tu Carrito de Compras</h1>
 
-{{#if cart.products.length}}
-    <form action="/update-cart" method="POST">
-        {{#each cart.products}}
-            <div class="product-item">
-                <p>Titulo: {{this.product.title}}</p>
-                <input type="hidden" name="productId" value="{{this.product._id}}">
-                <label for="quantity{{this.product._id}}">Cantidad:</label>
-                <input type="number" id="quantity{{this.product._id}}" name="quantity" value="{{this.quantity}}">
-                <p>Precio: ${{this.product.price}}</p>
-                <button type="button" class="decrease-quantity-btn" data-product-id="{{this.product._id}}">-</button>
-                <button type="button" class="increase-quantity-btn" data-product-id="{{this.product._id}}">+</button>
-            </div>
+    {{#if cart.products.length}}
+      <form action="/update-cart" method="POST">
+        {{#each cart.productsDetails}}
+          <div class="product-item">
+            <p>Titulo: {{this.product.title}}</p>
+            <input
+              type="hidden"
+              name="productId"
+              value="{{this.product._id}}"
+            />
+            <label for="quantity{{this.product._id}}">Cantidad:</label>
+            <input
+              type="number"
+              id="quantity{{this.product._id}}"
+              name="quantity"
+              value="{{this.quantity}}"
+            />
+            <button
+              type="button"
+              class="decrease-quantity-btn"
+              data-product-id="{{this.product._id}}"
+            >-</button>
+            <button
+              type="button"
+              class="increase-quantity-btn"
+              data-product-id="{{this.product._id}}"
+            >+</button>
+            <p>Precio: ${{this.product.price}}</p>
+          </div>
         {{/each}}
         <button type="submit">Actualizar Carrito</button>
-    </form>
-    <br>
-    <a href="/confirmar-compra"><button>Confirmar Compra</button></a>
-{{else}}
-    <p>Tu carrito está vacío.</p>
-{{/if}}
+      </form>
+      <br />
+      <a href="/confirmar-compra"><button>Confirmar Compra</button></a>
+    {{else}}
+      <p>Tu carrito está vacío.</p>
+    {{/if}}
 
-<button><a href="/products">Volver a Ver Productos</a></button>
+    <button><a href="/products">Volver a Ver Productos</a></button>
 
-<script src="js/cart.js"></script>
+    <script src="js/cart.js"></script>
 
-</body>
+  </body>
 </html>

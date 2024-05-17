@@ -1,0 +1,5 @@
+.product-item {
+    border: 1px solid #ccc; /* Estilo del borde */
+    padding: 10px; /* Espaciado interno */
+    margin-bottom: 10px; /* Espaciado inferior */
+}

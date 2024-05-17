@@ -28,7 +28,12 @@
     {{/each}}
 </div>
 
+<!--
 <a href="/cart" style="position: absolute; top: 10px; right: 10px;">Ir al Carrito</a>
+<a id="cart-link" style="position: absolute; top: 10px; right: 10px;">Ir al Carrito</a>
+-->
+
+<a id="cart-link" href="#" style="position: absolute; top: 10px; right: 10px;">Ir al Carrito</a>
 
 {{#if products.hasPrevPage}}
     <button><a href="/products?page={{products.prevPage}}">Anterior</a></button>
@@ -38,6 +43,10 @@
     <button><a href="/products?page={{products.nextPage}}">Siguiente</a></button>
 {{/if}}
 
+<!--
 <a href="/cart" style="position: fixed; bottom: 10px; right: 10px;">Ir al Carrito</a>
+<a id="cart-link" style="position: absolute; top: 10px; right: 10px;">Ir al Carrito</a>
+-->
+
 
 <script src="js/products.js"></script>

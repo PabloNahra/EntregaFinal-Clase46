@@ -40,6 +40,20 @@ export class UserManager {
         return { message: `No podemos devolver el usuario - ${error}` };
     }
 }
+
+async getIdByEmail(email) {
+  try {
+      const user = await userModel.findOne({ email: email });
+      if (user) {
+          return { userId: user._id };
+      } else {
+          return { message: 'Usuario no encontrado' };
+      }
+  } catch (error) {
+      console.error(error);
+      return { message: `No podemos devolver el usuario - ${error}` };
+  }
+}
   async changeRole(uId) {
     try {
       // Chequear que el userID es un ObjectId

@@ -1,6 +1,9 @@
 import { Router } from "express";
 //import { getTickets, postTicket } from "../controllers/tickets.controller.js";
-import { changeRole, getUsers, postDoc, deleteUsersInactive, getUserByEmail, deleteUser } from "../controllers/users.controller.js";
+import { changeRole, getUsers, 
+    postDoc, deleteUsersInactive, 
+    getUserByEmail, getUserIdByEmail, 
+    deleteUser } from "../controllers/users.controller.js";
 import { applyPolicies } from "../middlewares/auth.js";
 import { uploader } from "../utils/multer.js"
 
@@ -20,6 +23,9 @@ usersRoutes.delete('/', applyPolicies(['ADMIN']), deleteUsersInactive)
 
 // Obtener usuario por email
 usersRoutes.get('/getByEmail/:email', applyPolicies(['ADMIN']), getUserByEmail)
+
+// Obtener ID usuario por email
+usersRoutes.get('/getUserIdByEmail/:email', getUserIdByEmail)
 
 // Eliminar un usuario por id
 usersRoutes.delete('/delete/:uId', applyPolicies(['ADMIN']), deleteUser)

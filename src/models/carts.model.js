@@ -1,36 +1,41 @@
 import mongoose from "mongoose";
 
-const cartsCollection = 'carts'
+const cartsCollection = "carts";
 
-const cartsSchema = mongoose.Schema({
+const cartsSchema = mongoose.Schema(
+  {
     user_id: {
-        type: mongoose.Schema.ObjectId,
-        required: false,
-        ref: 'users', 
-        default: null
+      type: mongoose.Schema.ObjectId,
+      required: false,
+      ref: "users",
+      default: null,
     },
     products: {
-        type: [
-            {
-                product: {
-                    type: mongoose.Schema.ObjectId,
-                    required: true,
-                    ref: 'products'
-                },
-                quantity: Number
-            }
-        ],
-        default: []
+      type: [
+        {
+          product: {
+            type: mongoose.Schema.ObjectId,
+            required: true,
+            ref: "products",
+          },
+          quantity: Number,
+        },
+      ],
+      default: [],
     },
     status: {
-        type: String,
-        require: false,
-        default: null
+      type: String,
+      required: false,
+      enum: ["VACIO", "EN PROCESO", "EN PAGO", "CANCELADO", "FINALIZADO"],
+      default: "VACIO",
     },
-    last_update: {
-        type: Date,
-        default: Date.now
-    } 
-});
+  },
+  {
+    timestamps: {
+      createdAt: "create_date",
+      updatedAt: "last_update",
+    },
+  }
+);
 
-export const cartsModel = mongoose.model(cartsCollection, cartsSchema)
+export const cartsModel = mongoose.model(cartsCollection, cartsSchema);

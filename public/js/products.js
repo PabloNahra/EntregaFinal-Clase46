@@ -12,9 +12,8 @@ for (let btn of addToCartBtns) {
 }
 
 const addProductToCart = async (pId) => {
-    
   try {
-    let ultCart
+    let ultCart;
     console.log("Dentro de addProductToCart");
     console.log(pId);
     console.log(uEmail);
@@ -29,11 +28,7 @@ const addProductToCart = async (pId) => {
         },
       }
     );
-    console.log("userCarts");
-    console.log(userCarts.status);
-    console.log(userCarts);
 
-    
     if (userCarts.ok) {
       const responseData = await userCarts.json();
       const carritos = responseData.rdo;
@@ -50,38 +45,76 @@ const addProductToCart = async (pId) => {
       );
 
       // Tomar el carrito más reciente si hay alguno después de filtrar y ordenar
-//      let ultCart
+      //      let ultCart
       if (filteredCarts.length > 0) {
         ultCart = filteredCarts[0];
       } else {
         ultCart = null; // Si no hay carritos después de filtrar y ordenar
       }
-      console.log("Último carrito:", ultCart);
     }
-    console.log("Ahora ultimo carrito: ", ultCart)
-    
+    if (ultCart) {
+      // Verificar si el producto ya existe en ese carrito
+      const existeProducto = ultCart.products.some(
+        (producto) => producto.product === pId
+      );
 
-    // Buscar si el producto ya existe en ese carrito
-
-    // Si ya existe agregarle una unidad
-
-    // Si no existe agregar el producto
-    const result = await fetch(
-      `http://localhost:8080/api/carts/6642cce3df2eb01b9c11f586/product/${pId}`,
-      {
+      if (existeProducto) {
+        // Si ya existe, agregarle una unidad, o realizar cualquier otra acción que necesites
+        // Si no existe agregar el producto
+        const result = await fetch(
+          `http://localhost:8080/api/carts/${ultCart._id}/product/${pId}`,
+          {
+            body: JSON.stringify({
+              quantity: 1,
+            }),
+            method: "post",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (result.status === 200 || result.status === 201) {
+          alert("Se agregó correctamente");
+        } else {
+          alert("Error, no se pudo agregar");
+        }
+      } else {
+        // Si no existe, agregar el producto al carrito
+        const result = await fetch(
+          `http://localhost:8080/api/carts/${ultCart._id}/product/${pId}`,
+          {
+            body: JSON.stringify({
+              quantity: 1,
+            }),
+            method: "post",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        if (result.status === 200 || result.status === 201) {
+          alert("Se agregó correctamente");
+        } else {
+          alert("Error, no se pudo agregar");
+        }
+      }
+    } else {
+      // Generar un nuevo carrito con el producto
+      const result = await fetch(`http://localhost:8080/api/carts`, {
         body: JSON.stringify({
-          quantity: 1,
+          // user_id: "664171d632e9089c3a2cb2c3",
+          products : [{product: pId, "quantity": 1}]
         }),
         method: "post",
         headers: {
           "Content-Type": "application/json",
         },
+      });
+      if (result.status === 200 || result.status === 201) {
+        alert("Se agregó correctamente");
+      } else {
+        alert("Error, no se pudo agregar");
       }
-    );
-    if (result.status === 200 || result.status === 201) {
-      alert("Se agregó correctamente");
-    } else {
-      alert("Error, no se pudo agregar");
     }
   } catch (error) {
     alert("Error, no se pudo agregar");

@@ -28,6 +28,7 @@ cartsRoutes.put('/:cId/products/:pId', applyPolicies(['USER', 'PREMIUM']), putPr
 
 cartsRoutes.delete('/:cId', deleteProductsInCart) // Doc
 
+// Agregamos una cantidad de productos
 cartsRoutes.post("/:cId/product/:pId",  applyPolicies(['USER', 'PREMIUM']), postProductsInCart) // Doc
 
 // Finalizar el proceso de compra

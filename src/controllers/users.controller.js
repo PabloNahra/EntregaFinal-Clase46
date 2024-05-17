@@ -70,6 +70,19 @@ export const getUserByEmail = async (req, res) => {
   }
 }
 
+export const getUserIdByEmail = async (req, res) => {
+  try {
+    const { email } = req.params
+    const resultado = await usersServicesRep.getUserIdByEmailRep(email)
+    if(resultado){
+      res.send(resultado)
+    } else {
+      res.status(400).json(resultado)
+    }
+  } catch (error) {
+    res.status(400).json({message: `No podemos devolver el usuario - ${error}`})
+  }
+}
 
 export const deleteUser = async (req, res) => {
   const { uId } = req.params

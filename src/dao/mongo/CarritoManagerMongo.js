@@ -9,9 +9,10 @@ import { productsModel } from '../../models/products.model.js';
 import { userModel } from '../../models/user.model.js';
 
 
+
+
 const prodManager = new ProdManager(); 
 const tkManager = new TicketManager(); 
-
 
 export class CartManager {
   constructor(path) {
@@ -58,6 +59,25 @@ export class CartManager {
         }
       }
 
+      // Busco el id del usuario
+      const user_id_response = await fetch(
+        `http://localhost:8080/api/users/getUserIdByEmail/${user.email}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      let uId = null;
+      if (user_id_response.ok) {
+        const responseData = await user_id_response.json();
+        uId = responseData.userId;
+      }
+  
+      cart.user_id = uId;
+      cart.status = 'EN PROCESO'
       const added = await cartsModel.create(cart);
       if (added) {
         return { message: "Carrito creado exitosamente" };
@@ -68,6 +88,7 @@ export class CartManager {
     }
   }
 
+  /* FS
   async addCartProduct(cartId, productId) {
     const idCart = parseInt(cartId, 10);
     const idProd = parseInt(productId, 10);
@@ -96,6 +117,7 @@ export class CartManager {
       return "NO EXISTE";
     }
   }
+  */
 
   async addProductsInCart(cId, pId, quantity) {
     try {
@@ -109,6 +131,7 @@ export class CartManager {
         } else {
           cart.products.push({ product: pId, quantity });
         }
+        cart.status = 'EN PROCESO'
         await cart.save();
         return true;
       } else {
@@ -243,7 +266,7 @@ export class CartManager {
       const deleted = await cartsModel.updateOne(
         { _id: id },
         {
-          products: [],
+          products: [], status: 'VACIO'
         }
       );
       if (deleted.modifiedCount > 0) {

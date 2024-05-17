@@ -14,10 +14,6 @@ for (let btn of addToCartBtns) {
 const addProductToCart = async (pId) => {
   try {
     let ultCart;
-    console.log("Dentro de addProductToCart");
-    console.log(pId);
-    console.log(uEmail);
-
     // Buscar si el usuario tiene un cId activo (ultimo sin status finalizado)
     const userCarts = await fetch(
       `http://localhost:8080/api/carts/user_email/${uEmail}`,
@@ -32,9 +28,6 @@ const addProductToCart = async (pId) => {
     if (userCarts.ok) {
       const responseData = await userCarts.json();
       const carritos = responseData.rdo;
-      console.log("carritos");
-      console.log(carritos);
-
       // Filtrar carritos por estado y ordenar por last_connection
       const filteredCarts = carritos.filter((cart) => {
         const status = cart.status ? cart.status.toUpperCase() : null;

@@ -182,9 +182,7 @@ export class CartManager {
 
   async getCartByUserEmail(uEmail) {
     try {
-      console.log("uEmail en DAO")
-      console.log(uEmail)
-      
+
       // Busco el id del user por el email
       const userId = await userModel.findOne({email: uEmail}).select('_id')
       

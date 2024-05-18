@@ -279,6 +279,31 @@ export class CartManager {
     }
   }
 
+  async paymentProcess(cId, user) {
+    try {
+      // SI SE ENTREGA ALGUN PRODUCTO DOY POR FINALIZADO EL CARRITO
+      const result = await cartsModel.updateOne({ _id: cId }, {status: 'EN PROCESO DE PAGO'});
+      console.log("result")
+      console.log(result)
+
+      if (result.modifiedCount > 0) {
+        console.log("en proceso de pago")
+        return {
+          message: `Se actualizó el carrito al status: EN PROCESO DE PAGO`,
+          status: 201
+        };
+      }
+      else {
+        return {
+          message: `No se pudo actualizar el carrito al status: EN PROCESO DE PAGO`,
+        };
+      }
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  }
+
   async confirm(cId, user) {
     try {
       const prodInCart = await this.getCartById(cId);
@@ -348,9 +373,14 @@ export class CartManager {
           amount: montoCompra,
           purcharser: user.email,
         };
+
+        // SI SE ENTREGA ALGUN PRODUCTO DOY POR FINALIZADO EL CARRITO
+        await cartsModel.updateOne({ _id: cId }, {status: 'FINALIZADO'});
+
         let tkNew = new TicketDTO(tk);
         const tkresult = await tkManager.addTk(tkNew);
         return tkresult;
+        
       } else if (prodSinStock != 0) {
         // Devolver el arreglo con los productos que no se pudieron entregar
         return {

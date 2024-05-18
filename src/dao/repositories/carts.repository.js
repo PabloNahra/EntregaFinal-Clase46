@@ -54,6 +54,11 @@ export default class CartRepository {
         const result = await this.dao.addProductsInCart(cId, pId, quantity)
         return result
         }
+
+    paymentProcessCartRep = async(cId, user) => {
+        const result = await this.dao.paymentProcess(cId, user)
+        return result
+    }
     
     confCart = async(cId, user) => {
         const result = await this.dao.confirm(cId, user)

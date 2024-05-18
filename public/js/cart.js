@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const decreaseButtons = document.querySelectorAll(".decrease-quantity-btn");
   const removeButtons = document.querySelectorAll(".remove-product-btn");
   const vaciarCarritoBtn = document.querySelector(".empty-cart");
+  const confirmForm = document.querySelector("form[action='/payment-process']");
 
   // Agregar evento de clic a cada botón de aumento
   increaseButtons.forEach(function (button) {
@@ -116,6 +117,49 @@ document.addEventListener("DOMContentLoaded", function () {
       .catch((error) => {
         console.error("Error:", error);
       });
+  });
+
+  // Agregar un evento de escucha al evento de envío del formulario - Confirmar Compra
+  confirmForm.addEventListener("submit", function (event) {
+    // Prevenir el comportamiento predeterminado del formulario (no enviar la solicitud de forma predeterminada)
+    event.preventDefault();
+    // Obtener el valor de cId del atributo de datos
+    const cartDiv = document.getElementById("cart");
+    const cId = cartDiv.dataset.cartId;
+
+    // Por ejemplo, puedes mostrar un mensaje de confirmación
+    console.log(
+      "Se ha confirmado el carrito - Procederemos al proceso de pago"
+    );
+    // Cambiar el estado del carrito a En Proceso de pago
+    // Configurar la solicitud fetch
+    fetch(`http://localhost:8080/api/carts/${cId}/payment-process`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        console.log(response)
+        if (!response.ok) {
+          throw new Error(
+            "Error al actualizar el carrito a EN PROCESO DE PAGO"
+          );
+        }
+        // Manejar la respuesta si es necesario
+        console.log(
+          "El carrito se ha actualizado correctamente a EN PROCESO DE PAGO"
+        );
+
+        // Recargar la página después de eliminar el producto
+        // window.location.reload();
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+
+    // Ahora puedes enviar el formulario de confirmación de compra si es necesario
+    confirmForm.submit();
   });
 });
 

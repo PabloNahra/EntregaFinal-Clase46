@@ -26,7 +26,7 @@ const cartsSchema = mongoose.Schema(
     status: {
       type: String,
       required: false,
-      enum: ["VACIO", "EN PROCESO", "EN PAGO", "CANCELADO", "FINALIZADO"],
+      enum: ["VACIO", "EN PROCESO", "EN PROCESO DE PAGO", "CANCELADO", "FINALIZADO"],
       default: "VACIO",
     },
   },

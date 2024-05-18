@@ -1,0 +1,28 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tu Carrito de Compras</title>
+  <link rel="stylesheet" href="/css/cart.css" />
+</head>
+
+<body>
+
+  <div id="payment" data-cart-id="{{cId}}">
+    <h1>Elige tu forma de pago </h1>
+    <h2>Abonarás al momento de la entrega según la forma de pago elegida</h2>
+
+    <form action="/purchase" method="POST">
+      <h3>Efectivo</h3>
+      <button type="submit">Confirmar Pago</button>
+    </form>
+    <br />
+
+
+    <button><a href="/products">Volver a Ver Productos</a></button>
+
+  </div>
+
+
+  

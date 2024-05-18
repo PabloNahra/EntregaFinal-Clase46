@@ -160,6 +160,22 @@ export const postProductsInCart = async (req,res)=>{
   }
 }
 
+
+export const paymentProcessCart = async (req, res) => {
+  try {
+    const user = req.session.user
+    const {cId} = req.params
+    const resultado = await cartsServicesRep.paymentProcessCartRep(cId, user)
+    if(resultado){
+      res.send(resultado)
+    } else {
+      res.status(400).json(resultado)
+    }
+  } catch (error) {
+    res.status(400).json({message: `No podemos confirmar el carrito - ${error}`})
+  }
+}
+
 export const confirmCart = async (req, res) => {
   try {
     const user = req.session.user

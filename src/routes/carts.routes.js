@@ -4,6 +4,7 @@ import { getCarts, getCartsById,
   putCartById, putProductsInCart, 
   deleteProductsInCart, deleteProductInCart,
   postProductsInCart, 
+  paymentProcessCart,
   confirmCart, getCartsByUserEmail } from "../controllers/carts.controller.js";
 import { applyPolicies, checkRolUser } from "../middlewares/auth.js";
 
@@ -41,6 +42,9 @@ cartsRoutes.put('/:cId/products/:pId', applyPolicies(['USER', 'PREMIUM']), putPr
 
 // Agregamos una cantidad de productos
 cartsRoutes.post("/:cId/product/:pId",  applyPolicies(['USER', 'PREMIUM']), postProductsInCart) // Doc
+
+// Poner el carrito en proceso de pago
+cartsRoutes.post('/:cId/payment-process',  paymentProcessCart) // Doc
 
 // Finalizar el proceso de compra
 cartsRoutes.post('/:cId/purchase',  confirmCart) // Doc

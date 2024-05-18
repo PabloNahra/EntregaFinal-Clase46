@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const increaseButtons = document.querySelectorAll(".increase-quantity-btn");
   const decreaseButtons = document.querySelectorAll(".decrease-quantity-btn");
   const removeButtons = document.querySelectorAll(".remove-product-btn");
+  const vaciarCarritoBtn = document.querySelector(".empty-cart");
 
   // Agregar evento de clic a cada botón de aumento
   increaseButtons.forEach(function (button) {
@@ -53,15 +54,41 @@ document.addEventListener("DOMContentLoaded", function () {
     button.addEventListener("click", function () {
       // Obtener el ID del producto del botón
       const productId = button.getAttribute("data-product-id");
-      console.log("remove")
-      console.log(productId)
+      // Obtener el valor de cId del atributo de datos
+      const cartDiv = document.getElementById("cart");
+      const cId = cartDiv.dataset.cartId;
+      console.log("remove");
+      console.log(productId);
 
       // Lógica para eliminar el producto del carrito
-      // (Puedes implementar esto usando una función como updateCart(productId, 0))
-
-      // Aquí puedes llamar a una función para eliminar el producto del carrito
-      // deleteProductFromCart(productId);
+      // Configurar la solicitud fetch
+      fetch(`http://localhost:8080/api/carts/${cId}/products/${productId}`, {
+        // body: JSON.stringify({ quantity: 1 }),
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Error al actualizar el carrito");
+          }
+          // Manejar la respuesta si es necesario
+          console.log("El carrito se ha actualizado correctamente");
+          
+          // Recargar la página después de eliminar el producto
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
     });
+  });
+
+  // Agregar evento de clic al botón
+  vaciarCarritoBtn.addEventListener("click", function () {
+    console.log("Se ha clicado el botón 'Vaciar carrito'");
+    // Por ejemplo, podrías llamar a una función para vaciar el carrito
   });
 });
 

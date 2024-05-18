@@ -28,6 +28,7 @@ cartsRoutes.delete('/:cId/products/:pId', deleteCartById) // Doc
 cartsRoutes.delete('/:cId/products/:pId', deleteProductInCart) // Doc
 
 
+// Eliminar todos los productos
 cartsRoutes.delete('/:cId', deleteProductsInCart) // Doc
 
 

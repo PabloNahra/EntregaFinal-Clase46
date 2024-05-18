@@ -265,7 +265,7 @@ export class CartManager {
       const deleted = await cartsModel.updateOne(
         { _id: id },
         {
-          products: [], status: 'VACIO'
+          products: [], status: 'CANCELADO'
         }
       );
       if (deleted.modifiedCount > 0) {

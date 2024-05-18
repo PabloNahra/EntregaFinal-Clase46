@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
           }
           // Manejar la respuesta si es necesario
           console.log("El carrito se ha actualizado correctamente");
-          
+
           // Recargar la página después de eliminar el producto
           window.location.reload();
         })
@@ -88,7 +88,34 @@ document.addEventListener("DOMContentLoaded", function () {
   // Agregar evento de clic al botón
   vaciarCarritoBtn.addEventListener("click", function () {
     console.log("Se ha clicado el botón 'Vaciar carrito'");
-    // Por ejemplo, podrías llamar a una función para vaciar el carrito
+    // Obtener el valor de cId del atributo de datos
+    const cartDiv = document.getElementById("cart");
+    const cId = cartDiv.dataset.cartId;
+    console.log("remove");
+    console.log(cId);
+
+    // Lógica para eliminar el producto del carrito
+    // Configurar la solicitud fetch
+    fetch(`http://localhost:8080/api/carts/${cId}`, {
+      // body: JSON.stringify({ quantity: 1 }),
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Error al vaciar el carrito");
+        }
+        // Manejar la respuesta si es necesario
+        console.log("El carrito se ha vaciado correctamente");
+
+        // Recargar la página después de eliminar el producto
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
   });
 });
 

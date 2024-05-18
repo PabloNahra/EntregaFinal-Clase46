@@ -4,44 +4,6 @@ const lastName = userDataDiv.dataset.lastName;
 const uEmail = userDataDiv.dataset.email;
 
 
-/*
-document.addEventListener("DOMContentLoaded", () => {
-  // cargo el id del carrito en el boton de Ir a Carrito (ultimo carrito de compra activo del usuario)
-  // Valor fijo de cId para inicialización
-  const fixedCId = "1";
-
-  let ultCart;
-  const userCarts = await fetch(`http://localhost:8080/api/carts/user_email/${uEmail}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  if (userCarts.ok) {
-    const responseData = await userCarts.json();
-    const carritos = responseData.rdo;
-
-    const filteredCarts = carritos.filter((cart) => {
-      const status = cart.status ? cart.status.toUpperCase() : null;
-      return status !== "FINALIZADO" && status !== "CANCELADO";
-    });
-    filteredCarts.sort((a, b) => new Date(b.last_connection) - new Date(a.last_connection));
-
-    if (filteredCarts.length > 0) {
-      ultCart = filteredCarts[0];
-      // Obtengo el ultimo id de carrito
-      fixedCId = ultCart._id
-    } else {
-      ultCart = null;
-    }
-  }
-      
-      const cartLink = document.getElementById("cart-link");
-      cartLink.href = `/cart/${fixedCId}`;
-});
-*/
-
 document.addEventListener("DOMContentLoaded", async () => {
   // Valor fijo de cId para inicialización
   let fixedCId = "1"; // Definido como let para poder reasignarlo
@@ -138,6 +100,8 @@ const addProductToCart = async (pId) => {
         const cartLink = document.getElementById("cart-link");
         cartLink.href = `/cart/${ultCart._id}`;
         */
+        // Recargar la página después de eliminar el producto
+        window.location.reload();
       } else {
         alert("Error, no se pudo agregar");
       }
@@ -159,6 +123,8 @@ const addProductToCart = async (pId) => {
         const cartLink = document.getElementById("cart-link");
         cartLink.href = `/cart/${newCart._id}`;
         */
+        // Recargar la página después de eliminar el producto
+        window.location.reload();
       } else {
         alert("Error, no se pudo agregar");
       }

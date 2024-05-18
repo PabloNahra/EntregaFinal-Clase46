@@ -33,6 +33,11 @@ export default class CartRepository {
         return result
    }
 
+   delProdudctInCartRep = async (cId, pId) => {
+    const result = await this.dao.deleteProductInCart(cId, pId)
+    return result
+}
+
    putCartByIdRep = async (id, cart, user) => {
     const updateCart = cart
     const result = await this.dao.updateCart(id, updateCart, user)

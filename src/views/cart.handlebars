@@ -7,11 +7,11 @@
 </head>
 <body>
 
-<div>
+<div id="cart" data-cart-id="{{cId}}">
     <h1>Tu Carrito de Compras</h1>
 
     {{#if cart.products.length}}
-      <form action="/update-cart" method="POST">
+      <form action="/confirm-cart" method="POST">
         {{#each cart.productsDetails}}
           <div class="product-item">
             <p>Titulo2: {{this.product.title}}</p>
@@ -37,13 +37,20 @@
               class="increase-quantity-btn"
               data-product-id="{{this.product._id}}"
             >+</button>
-            <p>Precio: ${{this.product.price}}</p>
+            
+            <button 
+            type="button"
+            class="remove-product-btn" 
+            data-product-id="{{this.product._id}}"
+            >Eliminar</button> 
+
+            <p>Precio Unitario: ${{this.product.price}}</p>
           </div>
         {{/each}}
-        <button type="submit">Actualizar Carrito</button>
+        <button type="submit">Confirmar Compra</button>
       </form>
       <br />
-      <a href="/confirmar-compra"><button>Confirmar Compra</button></a>
+      <a href="/delete-cart"><button>Cancelar carrito</button></a>
     {{else}}
       <p>Tu carrito está vacío.</p>
     {{/if}}

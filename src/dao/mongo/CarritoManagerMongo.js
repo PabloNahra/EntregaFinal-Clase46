@@ -141,6 +141,7 @@ export class CartManager {
       return false;
     }
   }
+  
   // Elimino un producto dentro de un carrito
   async deleteProductInCart(cId, pId) {
     try {

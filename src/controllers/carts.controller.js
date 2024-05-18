@@ -2,18 +2,6 @@ import { cartsModel } from "../models/carts.model.js"
 import CartManager from "../dao/mongo/CarritoManagerMongo.js";
 import { cartsServicesRep } from "../dao/repositories/index.js";
 
-/*
-export const getCartsOld = async (req, res) => {
-    try {
-      const carts = await cartsModel.find()
-      res.send({carts})
-    } catch (error) {
-      console.error(error)
-      res.status(400).json({message: `No podemos devolver los carritos - ${error}`})
-    }
-}
-*/
-
 export const getCarts = async (req, res) => {
   try {
     const resultado = await cartsServicesRep.getCartsRep()
@@ -27,24 +15,6 @@ export const getCarts = async (req, res) => {
   }
 }
 
-/*
-export const getCartsByIdOld = async (req, res) => {
-  try {
-    const { cId } = req.params
-    const products = new CartManager()
-
-    const result = await products.getCartById(cId)
-    if (result.message="OK"){
-      return res.status(200).json(result)
-    }
-    else {
-      res.status(400).json(result)
-    }
-  } catch (error) {
-    res.status(400).json({message: "El carrito no existe"})
-  }
-}
-*/
 
 export const getCartsById = async (req, res) => {
   try {
@@ -95,6 +65,21 @@ export const deleteCartById = async (req, res) => {
   const { cId } = req.params
   try {
     const resultado = await cartsServicesRep.delCart(cId)
+    if(resultado){
+      res.send({resultado})
+    } else {
+      res.status(400).json(resultado)
+    }
+  } catch (error) {
+    console.error(error)
+    res.status(400).json({message: `No podemos eliminar los productos del Carrtio ID: ${cId} - ${error}`})
+  }
+}
+
+export const deleteProductInCart = async (req, res) => {
+  const { cId, pId } = req.params
+  try {
+    const resultado = await cartsServicesRep.delProdudctInCartRep(cId, pId)
     if(resultado){
       res.send({resultado})
     } else {

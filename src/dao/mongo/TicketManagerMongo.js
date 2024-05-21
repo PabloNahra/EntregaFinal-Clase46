@@ -19,7 +19,7 @@ export class TicketManager {
     async addTk(tk){
       try {
           const added = await ticketsModel.create(tk)
-          return {message: 'Ticket añadido', ticketId: added._id  }
+          return {message: 'Ticket añadido', ticketId: added._id, status: 201 }
       } catch (error) {
           console.error(error)
           return {message: `No se pudo añadir el ticket - ${error}`}

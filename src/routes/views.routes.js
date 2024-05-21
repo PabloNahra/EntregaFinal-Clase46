@@ -185,12 +185,13 @@ viewsRoutes.get("/payment-process/:cId", checkAuth, async (req, res) => {
 });
 
 // Vista de confirmación de pago
-viewsRoutes.get("/purchase/:cId", checkAuth, async (req, res) => {
+viewsRoutes.get("/purchase", checkAuth, async (req, res) => {
   try {
-    const { user } = req.session;
-    const { cId } = req.params;
+    // const { user } = req.session;
+    // const { cId, tId } = req.params;
 
     // Renderizar la vista cart.handlebars con los datos del usuario y del carrito
+    // res.render("purchase", { cId, tId });
     res.render("purchase");
   } catch (error) {
     // Manejar errores

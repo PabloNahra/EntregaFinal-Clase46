@@ -30,10 +30,6 @@ document.addEventListener("DOMContentLoaded", function () {
       checkbox.value.toUpperCase()
     );
 
-    console.log(metodosPago); // Imprime la lista en la consola para verificar
-    console.log(cartId);
-
-    // Ejecutar el EndPoint para confirmar el carrito y generar el ticket (Capturar el número de ticket)
     // Ejecutar el EndPoint para confirmar el carrito y generar el ticket (Capturar el número de ticket)
     try {
       const response = await fetch(
@@ -57,6 +53,8 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log(result);
         console.log(result.ticketId);
 
+        const ticketId = result.ticketId.toString();
+
         console.log("cartId");
         console.log(cartId);
 
@@ -64,7 +62,9 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("ticketId").value = result.ticketId;
 
         // Enviar el submit para renderizar la pantalla de finalización
-        form.submit(); // Descomenta esta línea si deseas enviar el formulario después de procesarlo
+        // form.submit(); // Descomenta esta línea si deseas enviar el formulario después de procesarlo
+        // Redirigir a la página de confirmación de compra con cId y tId en la URL
+        window.location.href = `/purchase?cId=${cartId}&tId=${ticketId}`;
       } else {
         alert("Error, no se pudo crear el ticket");
         window.location.reload();

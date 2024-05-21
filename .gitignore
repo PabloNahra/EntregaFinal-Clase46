@@ -9,6 +9,8 @@ src/appPrueba.js
 
 src/.env.development
 src/.env.production
+.env
+
 errors.log
 errors-prod.log
 errors-dev.log
@@ -18,3 +20,5 @@ package.json
 
 public/img
 imagenes_subir
+
+

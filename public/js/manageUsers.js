@@ -16,8 +16,6 @@ window.addEventListener("DOMContentLoaded", async () => {
   try {
     const response = await fetch("http://localhost:8080/api/users");
     const data = await response.json();
-    console.log(data);
-
     if (response.ok) {
       // Limpiar cualquier opción existente en el select
       emailInput.innerHTML = "";
@@ -98,8 +96,6 @@ window.addEventListener("DOMContentLoaded", async () => {
                 // Recargar la lista de usuarios
                 const response = await fetch("http://localhost:8080/api/users");
                 const data = await response.json();
-                console.log(data);
-
                 if (response.ok) {
                   // Limpiar cualquier opción existente en el select
                   emailInput.innerHTML = "";

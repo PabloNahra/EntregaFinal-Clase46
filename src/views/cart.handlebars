@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Proceso de pago</title>
+  <title>TU CARRITO</title>
   <link rel="stylesheet" href="/css/cart.css" />
 </head>
 
 <body>
 
   <div id="cart" data-cart-id="{{cId}}">
-    <h1>Proceso de Pago</h1>
+    <h1>TU CARRITO</h1>
 
     {{#if cart.products.length}}
     <form action="/payment-process/{{cId}}" method="GET">

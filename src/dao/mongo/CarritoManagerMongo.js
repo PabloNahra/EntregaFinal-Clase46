@@ -309,9 +309,6 @@ export class CartManager {
       let quantityTotal = 0;
       const prodSinStock = [];
 
-      console.log("cartPurchase")
-      console.log(cartPurchase)
-
       /* Confirmar el carrito si: 
       - El usuario que confirma es el mismo que el dueño del carrito o si es un user ADMIN
       - Si el usuario existe 

@@ -12,10 +12,8 @@ export class UserManager {
   async get() {
     try {
       const users = await userModel.find();
-      //const usersAll = new UsersAllDTO(users)
       // Mapear cada usuario a UsersAllDTO
       const usersAll = users.map((user) => new UsersAllDTO(user));
-      //console.log(usersAll)
       return { usersAll };
     } catch (error) {
       console.error(error);
@@ -25,12 +23,9 @@ export class UserManager {
 
   async getByEmail(email) {
     try {
-      console.log("Dentro de getByEmail")
         const user = await userModel.findOne({ email: email });
         if (user) {
             const userByEmailDTO = new UserByEmailDTO(user);
-            console.log("Dentro de getByEmail userByEmailDTO")
-            console.log(userByEmailDTO)
             return { userByEmailDTO };
         } else {
             return { message: 'Usuario no encontrado' };
@@ -120,7 +115,6 @@ async getIdByEmail(email) {
         (user.role.toUpperCase() === "USER") &
         (allValuesPresent === false)
       ) {
-        console.log("Change Rol NO tiene la doc")
         return { 
           message: "El usuario NO ha procesado toda su documentación", 
           status: 403 };
@@ -188,8 +182,6 @@ async getIdByEmail(email) {
       // Calcular la fecha actual menos 30 minutos o 2 dias (2880 minutos)
       const cutoffDate = new Date();
       cutoffDate.setMinutes(cutoffDate.getMinutes() - 2880);
-      console.log(cutoffDate);
-
       // Filtrar los usuarios cuya última conexión sea más antigua que cutoffDate
       const usersInactives = users.filter(
         (user) => new Date(user.last_connection) < cutoffDate

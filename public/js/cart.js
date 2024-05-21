@@ -1,8 +1,7 @@
 // cart.js
 
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("DOM completamente cargado y parseado");
-
+  
   // Obtener todos los botones de aumento y disminución
   const increaseButtons = document.querySelectorAll(".increase-quantity-btn");
   const decreaseButtons = document.querySelectorAll(".decrease-quantity-btn");
@@ -58,8 +57,6 @@ document.addEventListener("DOMContentLoaded", function () {
       // Obtener el valor de cId del atributo de datos
       const cartDiv = document.getElementById("cart");
       const cId = cartDiv.dataset.cartId;
-      console.log("remove");
-      console.log(productId);
 
       // Lógica para eliminar el producto del carrito
       // Configurar la solicitud fetch
@@ -74,9 +71,6 @@ document.addEventListener("DOMContentLoaded", function () {
           if (!response.ok) {
             throw new Error("Error al actualizar el carrito");
           }
-          // Manejar la respuesta si es necesario
-          console.log("El carrito se ha actualizado correctamente");
-
           // Recargar la página después de eliminar el producto
           window.location.reload();
         })
@@ -88,12 +82,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Agregar evento de clic al botón
   vaciarCarritoBtn.addEventListener("click", function () {
-    console.log("Se ha clicado el botón 'Vaciar carrito'");
     // Obtener el valor de cId del atributo de datos
     const cartDiv = document.getElementById("cart");
     const cId = cartDiv.dataset.cartId;
-    console.log("remove");
-    console.log(cId);
 
     // Lógica para eliminar el producto del carrito
     // Configurar la solicitud fetch
@@ -108,14 +99,11 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!response.ok) {
           throw new Error("Error al vaciar el carrito");
         }
-        // Manejar la respuesta si es necesario
-        console.log("El carrito se ha vaciado correctamente");
-
         // Recargar la página después de eliminar el producto
         window.location.reload();
       })
       .catch((error) => {
-        console.error("Error:", error);
+        alert("Error:", error);
       });
   });
 
@@ -127,10 +115,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const cartDiv = document.getElementById("cart");
     const cId = cartDiv.dataset.cartId;
 
-    // Por ejemplo, puedes mostrar un mensaje de confirmación
-    console.log(
-      "Se ha confirmado el carrito - Procederemos al proceso de pago"
-    );
     // Cambiar el estado del carrito a En Proceso de pago
     // Configurar la solicitud fetch
     fetch(`http://localhost:8080/api/carts/${cId}/payment-process`, {
@@ -140,22 +124,16 @@ document.addEventListener("DOMContentLoaded", function () {
       },
     })
       .then((response) => {
-        console.log(response)
         if (!response.ok) {
           throw new Error(
             "Error al actualizar el carrito a EN PROCESO DE PAGO"
           );
         }
-        // Manejar la respuesta si es necesario
-        console.log(
-          "El carrito se ha actualizado correctamente a EN PROCESO DE PAGO"
-        );
-
         // Recargar la página después de eliminar el producto
         // window.location.reload();
       })
       .catch((error) => {
-        console.error("Error:", error);
+        alert("Error:", error);
       });
 
     // Ahora puedes enviar el formulario de confirmación de compra si es necesario
@@ -181,7 +159,7 @@ function updateCart(productId, newQuantity) {
         throw new Error("Error al actualizar el carrito");
       }
       // Manejar la respuesta si es necesario
-      console.log("El carrito se ha actualizado correctamente");
+      alert("El carrito se ha actualizado correctamente");
     })
     .catch((error) => {
       console.error("Error:", error);

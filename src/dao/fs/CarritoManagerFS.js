@@ -57,8 +57,6 @@ export class CartManager{
     }
 
     async addCartProduct(cartId, productId){
-        console.log(cartId)
-        console.log(productId)
         const idCart = parseInt(cartId, 10)
         const idProd = parseInt(productId, 10)
 
@@ -68,22 +66,17 @@ export class CartManager{
         const existingCart = carts.find(cart => cart.id === idCart);
 
         if (existingCart) {
-            console.log("existe el carrito")
             // El carrito ya existe, verifica si el productId ya está en la lista de productos
             const existingProduct = existingCart.products.find(product => product.productId === idProd);
 
             if (existingProduct) {
                 // El producto ya existe, incrementa la cantidad
-                console.log("existe el producto")
                 existingProduct.quantity += 1;
             } else {
                 // El producto no existe, agrégalo con una cantidad de 1
-                console.log("NO existe el producto")
                 existingCart.products.push({productId: idProd, quantity: 1 });
             }
             // Guarda los cambios en el archivo o donde almacenes tus carritos
-            console.log("Grabo los cambios")
-            console.log(carts)
             await fs.promises.writeFile(this.path, JSON.stringify(carts), 'utf-8');
 
         } else {

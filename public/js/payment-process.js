@@ -7,7 +7,6 @@ app.get('/payment-process/:cId', (req, res) => {
 });
 */
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("DOM PAYMENT-PROCESS completamente cargado y parseado");
 
   // Selecciona el formulario
   const form = document.querySelector("form");
@@ -32,41 +31,40 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Ejecutar el EndPoint para confirmar el carrito y generar el ticket (Capturar el número de ticket)
     try {
-      const response = await fetch(
-        `http://localhost:8080/api/carts/${cartId}/purchase`,
-        {
-          body: JSON.stringify({ paymentMethods: metodosPago }),
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+
+      if (metodosPago && metodosPago.length > 0){
+        const response = await fetch(
+          `http://localhost:8080/api/carts/${cartId}/purchase`,
+          {
+            body: JSON.stringify({ paymentMethods: metodosPago }),
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+  
+        const result = await response.json(); // Convertir la respuesta a JSON
+        if (result.status === 200 || result.status === 201) {
+          alert("Se creó el ticket correctamente");
+  
+          const ticketId = result.ticketId.toString();
+  
+          // Establece el valor de ticketId en el campo oculto del formulario
+          document.getElementById("ticketId").value = result.ticketId;
+  
+          // Enviar el submit para renderizar la pantalla de finalización
+          // form.submit(); // Descomenta esta línea si deseas enviar el formulario después de procesarlo
+          // Redirigir a la página de confirmación de compra con cId y tId en la URL
+          window.location.href = `/purchase?cId=${cartId}&tId=${ticketId}`;
+        } else {
+          alert("Error, no se pudo crear el ticket");
+          window.location.reload();
         }
-      );
+  
 
-      const result = await response.json(); // Convertir la respuesta a JSON
-      console.log("result");
-      console.log(result);
-
-      if (result.status === 200 || result.status === 201) {
-        alert("Se creó el ticket correctamente");
-        console.log("result.ticketId");
-        console.log(result);
-        console.log(result.ticketId);
-
-        const ticketId = result.ticketId.toString();
-
-        console.log("cartId");
-        console.log(cartId);
-
-        // Establece el valor de ticketId en el campo oculto del formulario
-        document.getElementById("ticketId").value = result.ticketId;
-
-        // Enviar el submit para renderizar la pantalla de finalización
-        // form.submit(); // Descomenta esta línea si deseas enviar el formulario después de procesarlo
-        // Redirigir a la página de confirmación de compra con cId y tId en la URL
-        window.location.href = `/purchase?cId=${cartId}&tId=${ticketId}`;
       } else {
-        alert("Error, no se pudo crear el ticket");
+        alert("Debe registrar por lo menos un medio de pago ")
         window.location.reload();
       }
     } catch (error) {

@@ -10,19 +10,53 @@
 <body>
 
   <div id="payment" data-cart-id="{{cId}}">
-    <h1>Elige tu forma de pago </h1>
+    <h1>Elige tus formas de pago </h1>
     <h2>Abonarás al momento de la entrega según la forma de pago elegida</h2>
 
     <form action="/purchase" method="POST">
-      <h3>Efectivo</h3>
-      <button type="submit">Confirmar Pago</button>
+      <h3>Formas de Pago</h3>
+
+      <label>
+        <input type="checkbox" name="paymentMethods" value="Efectivo">
+        Efectivo
+      </label>
+      <br>
+
+      <label>
+        <input type="checkbox" name="paymentMethods" value="Tarjeta de Crédito">
+        Tarjeta de Crédito
+      </label>
+      <br>
+
+      <label>
+        <input type="checkbox" name="paymentMethods" value="Tarjeta de Débito">
+        Tarjeta de Débito
+      </label>
+      <br>
+
+      <label>
+        <input type="checkbox" name="paymentMethods" value="Mercado Pago">
+        Mercado Pago
+      </label>
+      <br>
+
+      <label>
+        <input type="checkbox" name="paymentMethods" value="Otras Billeteras Virtuales">
+        Otras Billeteras Virtuales
+      </label>
+      <br>
+
+      <input type="hidden" name="cartId" value="{{cId}}">
+      <input type="hidden" name="ticketId" id="ticketId"> 
+
+      <br><br>
+
+      <button type="submit">Confirmar Forma de Pago</button>
     </form>
     <br />
-
 
     <button><a href="/products">Volver a Ver Productos</a></button>
 
   </div>
 
-
-  
+<script src="/js/payment-process.js"></script>

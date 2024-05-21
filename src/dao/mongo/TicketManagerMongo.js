@@ -19,10 +19,10 @@ export class TicketManager {
     async addTk(tk){
       try {
           const added = await ticketsModel.create(tk)
-          return {message: 'tk añadido DAO'}
+          return {message: 'Ticket añadido', ticketId: added._id  }
       } catch (error) {
           console.error(error)
-          return {message: `No se pudo añadir el tk DAO - ${error}`}
+          return {message: `No se pudo añadir el ticket - ${error}`}
       }
     }
 }

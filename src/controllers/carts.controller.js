@@ -180,7 +180,8 @@ export const confirmCart = async (req, res) => {
   try {
     const user = req.session.user
     const {cId} = req.params
-    const resultado = await cartsServicesRep.confCart(cId, user)
+    const cartPurchase = req.body
+    const resultado = await cartsServicesRep.confCart(cId, user, cartPurchase)
     if(resultado){
       res.send(resultado)
     } else {

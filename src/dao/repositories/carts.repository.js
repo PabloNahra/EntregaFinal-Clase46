@@ -60,8 +60,8 @@ export default class CartRepository {
         return result
     }
     
-    confCart = async(cId, user) => {
-        const result = await this.dao.confirm(cId, user)
+    confCart = async(cId, user, cartPurchase) => {
+        const result = await this.dao.confirm(cId, user, cartPurchase)
         return result
     }
 

@@ -283,11 +283,8 @@ export class CartManager {
     try {
       // SI SE ENTREGA ALGUN PRODUCTO DOY POR FINALIZADO EL CARRITO
       const result = await cartsModel.updateOne({ _id: cId }, {status: 'EN PROCESO DE PAGO'});
-      console.log("result")
-      console.log(result)
 
       if (result.modifiedCount > 0) {
-        console.log("en proceso de pago")
         return {
           message: `Se actualizó el carrito al status: EN PROCESO DE PAGO`,
           status: 201
@@ -304,7 +301,7 @@ export class CartManager {
     }
   }
 
-  async confirm(cId, user) {
+  async confirm(cId, user, cartPurchase) {
     try {
       const prodInCart = await this.getCartById(cId);
       const newCart = prodInCart;
@@ -312,83 +309,110 @@ export class CartManager {
       let quantityTotal = 0;
       const prodSinStock = [];
 
-      for (const prod of prodInCart.rdo) {
-        let quantityConfirm = 0;
+      console.log("cartPurchase")
+      console.log(cartPurchase)
 
-        // Consultar el stock del producto
-        const stockProducto = prod.product.stock;
+      /* Confirmar el carrito si: 
+      - El usuario que confirma es el mismo que el dueño del carrito o si es un user ADMIN
+      - Si el usuario existe 
+      - El carrito tiene productos
+      - Si el status no es FINALIZADO ni CANCELADO
+      */
+      const cartConfirm = await cartsModel.findOne({ _id: cId })
+      const userCartConfirm = await userModel.findOne({_id: cartConfirm.user_id})
 
-        // Si tengo stock sumar a la compra a confirmar
-        // Puedo completar el total de las unidades del producto
-        if (prod.quantity <= stockProducto) {
-          quantityConfirm = prod.quantity;
+      if (
+        (user)
+        &&
+        (user.role.toUpperCase() === 'ADMIN' || user.email === userCartConfirm.email)
+        &&
+        (prodInCart.rdo && prodInCart.rdo.length > 0)
+        &&
+        (prodInCart.status != 'FINALIZADO' && prodInCart.status != 'CANCELADO')
+      ){
+        for (const prod of prodInCart.rdo) {
+          let quantityConfirm = 0;
 
-          quantityTotal += quantityConfirm;
-          montoCompra += quantityConfirm * prod.product.price;
-          // Puedo entregar un parcial de las unidades del producto
-        } else if (stockProducto > 0) {
-          quantityConfirm = stockProducto;
-          quantityTotal += quantityConfirm;
-          montoCompra += quantityConfirm * prod.product.price;
-          prodSinStock.push(prod.product._id);
-        } else {
-          quantityConfirm = 0;
-          prodSinStock.push(prod.product._id);
-        }
+          // Consultar el stock del producto
+          const stockProducto = prod.product.stock;
 
-        // Descontar del stock del producto (ojo con negativos) y del carrito
-        if (quantityConfirm != 0) {
-          // stock a actualizar en el producto
-          let stock = stockProducto - quantityConfirm;
-          let productUpdateStock = { stock: stock };
-          let updateProduct = new ProductDTO(productUpdateStock);
-          await prodManager.updateProduct(
-            prod.product._id.toString(),
-            updateProduct
-          );
+          // Si tengo stock sumar a la compra a confirmar
+          // Puedo completar el total de las unidades del producto
+          if (prod.quantity <= stockProducto) {
+            quantityConfirm = prod.quantity;
 
-          // Reviso stock restante en el carrito
-          let stockInCartRestante = prod.quantity - quantityConfirm;
-
-          // Actualizo carrito
-          // Si complete la entrega del producto (todas las unidades)
-          if (stockInCartRestante === 0) {
-            this.deleteProductInCart(cId, prod.product._id.toString());
+            quantityTotal += quantityConfirm;
+            montoCompra += quantityConfirm * prod.product.price;
+            // Puedo entregar un parcial de las unidades del producto
+          } else if (stockProducto > 0) {
+            quantityConfirm = stockProducto;
+            quantityTotal += quantityConfirm;
+            montoCompra += quantityConfirm * prod.product.price;
+            prodSinStock.push(prod.product._id);
+          } else {
+            quantityConfirm = 0;
+            prodSinStock.push(prod.product._id);
           }
-          // Si complete la entrega del producto parcialmente (algunas unidades)
-          else if (stockInCartRestante > 0) {
-            this.updateProductInCart(
-              cId,
+
+          // Descontar del stock del producto (ojo con negativos) y del carrito
+          if (quantityConfirm != 0) {
+            // stock a actualizar en el producto
+            let stock = stockProducto - quantityConfirm;
+            let productUpdateStock = { stock: stock };
+            let updateProduct = new ProductDTO(productUpdateStock);
+            await prodManager.updateProduct(
               prod.product._id.toString(),
-              stockInCartRestante
+              updateProduct
             );
+
+            // Reviso stock restante en el carrito
+            let stockInCartRestante = prod.quantity - quantityConfirm;
+
+            // Actualizo carrito
+            // Si complete la entrega del producto (todas las unidades)
+            if (stockInCartRestante === 0) {
+              this.deleteProductInCart(cId, prod.product._id.toString());
+            }
+            // Si complete la entrega del producto parcialmente (algunas unidades)
+            else if (stockInCartRestante > 0) {
+              this.updateProductInCart(
+                cId,
+                prod.product._id.toString(),
+                stockInCartRestante
+              );
+            }
           }
         }
-      }
 
-      // Actualizar el ticket
-      // Confirmar la compra si tenemos alguno producto -- Ticket
-      if (quantityTotal != 0) {
-        let tk = {
-          amount: montoCompra,
-          purcharser: user.email,
-        };
+        // Actualizar el ticket
+        // Confirmar la compra si tenemos alguno producto -- Ticket
+        if (quantityTotal != 0) {
+          let tk = {
+            amount: montoCompra,
+            purcharser: user.email,
+            paymentMethods: cartPurchase.paymentMethods
+          };
 
-        // SI SE ENTREGA ALGUN PRODUCTO DOY POR FINALIZADO EL CARRITO
-        await cartsModel.updateOne({ _id: cId }, {status: 'FINALIZADO'});
+          // SI SE ENTREGA ALGUN PRODUCTO DOY POR FINALIZADO EL CARRITO
+          await cartsModel.updateOne({ _id: cId }, {status: 'FINALIZADO'});
 
-        let tkNew = new TicketDTO(tk);
-        const tkresult = await tkManager.addTk(tkNew);
-        return tkresult;
-        
-      } else if (prodSinStock != 0) {
-        // Devolver el arreglo con los productos que no se pudieron entregar
+          let tkNew = new TicketDTO(tk);
+          const tkresult = await tkManager.addTk(tkNew);
+          return tkresult;
+          
+        } else if (prodSinStock != 0) {
+          // Devolver el arreglo con los productos que no se pudieron entregar
+          return {
+            message: `No se pudieron entregar estos productos  - IDs: ${prodSinStock}`,
+          };
+        } else {
+          return {
+            message: `No se pudo entregar ningún producto - ${prodSinStock}`,
+          };
+        }
+      }  else {
         return {
-          message: `No se pudieron entregar estos producto  - IDs: ${prodSinStock}`,
-        };
-      } else {
-        return {
-          message: `No se pudo entregar ningun producto - ${prodSinStock}`,
+          message: `No se puedo confirmar el carrito - ID: ${cId}`,
         };
       }
     } catch (error) {

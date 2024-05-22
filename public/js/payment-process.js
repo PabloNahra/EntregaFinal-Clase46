@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (metodosPago && metodosPago.length > 0){
         const response = await fetch(
-          `http://localhost:8080/api/carts/${cartId}/purchase`,
+          `${API_URL}/api/carts/${cartId}/purchase`,
           {
             body: JSON.stringify({ paymentMethods: metodosPago }),
             method: "POST",

@@ -2,6 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const recoverForm = document.getElementById('recoverForm');
     const tokenInput = document.getElementById('tokenInput');
 
+    console.log("API_URL recoverPass", API_URL)
+
     // Extraer el token de la URL
     const token = window.location.pathname.split('/').pop();    
     tokenInput.value = token;
@@ -12,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const newPassword = document.getElementById('newPasswordInput').value;
         try {
-            const response = await fetch(`http://localhost:8080/api/session/recoverpass/${token}`, {
+            const response = await fetch(`${API_URL}/api/session/recoverpass/${token}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -5,6 +5,9 @@ const emailInput = document.getElementById("emailInput");
 const passwordInput = document.getElementById("passwordInput");
 const resultMessage = document.getElementById("resultMessage");
 
+
+console.log("API_URL manageUser", API_URL)
+
 window.addEventListener("DOMContentLoaded", async () => {
   const emailInput = document.getElementById("emailInput");
   const firstNameInput = document.querySelector('input[name="first_name"]');
@@ -14,7 +17,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   const modifyRoleForm = document.getElementById("modifyRoleForm");
 
   try {
-    const response = await fetch("http://localhost:8080/api/users");
+    const response = await fetch(`${API_URL}/api/users`);
     const data = await response.json();
     if (response.ok) {
       // Limpiar cualquier opción existente en el select
@@ -62,7 +65,7 @@ window.addEventListener("DOMContentLoaded", async () => {
           try {
             // Consultar el servicio para obtener los datos a partir del correo electrónico
             const userResponse = await fetch(
-              `http://localhost:8080/api/users/getByEmail/${selectedEmail}`
+              `${API_URL}/api/users/getByEmail/${selectedEmail}`
             );
             const user = await userResponse.json();
 
@@ -73,7 +76,7 @@ window.addEventListener("DOMContentLoaded", async () => {
                 user.userByEmailDTO.role === "PREMIUM"
               ) {
                 const result = await fetch(
-                  `http://localhost:8080/api/users/premium/${user.userByEmailDTO.user_id}`,
+                  `${API_URL}/api/users/premium/${user.userByEmailDTO.user_id}`,
                   {
                     method: "POST",
                     body: JSON.stringify({
@@ -94,7 +97,7 @@ window.addEventListener("DOMContentLoaded", async () => {
                 }
 
                 // Recargar la lista de usuarios
-                const response = await fetch("http://localhost:8080/api/users");
+                const response = await fetch(`${API_URL}/api/users`);
                 const data = await response.json();
                 if (response.ok) {
                   // Limpiar cualquier opción existente en el select
@@ -157,7 +160,7 @@ deleteBtn.addEventListener("click", async () => {
 
     // Consultar el servicio para obtener los datos a partir del correo electrónico
     const userResponse = await fetch(
-      `http://localhost:8080/api/users/getByEmail/${selectedEmail}`
+      `${API_URL}/api/users/getByEmail/${selectedEmail}`
     );
     const userData = await userResponse.json();
 
@@ -167,7 +170,7 @@ deleteBtn.addEventListener("click", async () => {
 
       // Realizar la solicitud para eliminar al usuario por su id
       const deleteUserResponse = await fetch(
-        `http://localhost:8080/api/users/delete/${userId}`,
+        `${API_URL}/api/users/delete/${userId}`,
         {
           method: "DELETE",
         }

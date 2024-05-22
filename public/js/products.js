@@ -10,7 +10,7 @@ const apiURL = obtenerApiUrl();
 console.log("apiURL")
 console.log(apiURL)
 */
-console.log("API_URL 1", API_URL)
+console.log("API_URL products", API_URL)
 
 document.addEventListener("DOMContentLoaded", async () => {
   // Valor fijo de cId para inicialización

@@ -1,12 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio</title>
+    <script>
+        // Define the API URL based on the environment
+        const API_URL = window.location.hostname === 'localhost'
+            ? 'http://localhost:8080'
+            : 'https://entregafinal-clase46-production.up.railway.app';
+    </script>
+</head>
+<body>
+    <div>
+        <h1>INICIO</h1>
+        
+        <h2>Bienvenido {{first_name}} {{last_name}}</h2>
+
+        <h3><a id="products-link" href="#">Ver Productos</a></h3>
+
+        <button id="logoutBtn" type="button">Cerrar Sesión</button>
+    </div>
+
+    <script src="js/index.js"></script>
+</body>
+</html>
+
+
+{{!--
 <div>
     <h1>INICIO</h1>
     
     <h2>Bienvenido {{first_name}} {{last_name}}</h2>
 
-    <h3><a href="http://localhost:8080/products">Ver Productos</a></h3>
+    <h3><a href={API_URL}/products>Ver Productos</a></h3>
 
     <button id="logoutBtn" type="button">Cerrar Sesión</button>
 
 </div>
 
 <script src="js/index.js"></script>
+--}}

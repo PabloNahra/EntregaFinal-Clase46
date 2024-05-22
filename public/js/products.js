@@ -10,7 +10,7 @@ const apiURL = obtenerApiUrl();
 console.log("apiURL")
 console.log(apiURL)
 */
-
+console.log("API_URL 1", API_URL)
 
 document.addEventListener("DOMContentLoaded", async () => {
   // Valor fijo de cId para inicialización
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   try {
 
-    console.log("API_URL", API_URL)
+    console.log("API_URL 2", API_URL)
 
     let ultCart;
     //const userCarts = await fetch(`http://localhost:8080/api/carts/user_email/${uEmail}`, {

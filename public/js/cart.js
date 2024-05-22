@@ -1,5 +1,7 @@
 // cart.js
 
+console.log("API_URL Cart", API_URL)
+
 document.addEventListener("DOMContentLoaded", function () {
   
   // Obtener todos los botones de aumento y disminución
@@ -60,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Lógica para eliminar el producto del carrito
       // Configurar la solicitud fetch
-      fetch(`http://localhost:8080/api/carts/${cId}/products/${productId}`, {
+      fetch(`${API_URL}/api/carts/${cId}/products/${productId}`, {
         // body: JSON.stringify({ quantity: 1 }),
         method: "DELETE",
         headers: {
@@ -88,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Lógica para eliminar el producto del carrito
     // Configurar la solicitud fetch
-    fetch(`http://localhost:8080/api/carts/${cId}`, {
+    fetch(`${API_URL}/api/carts/${cId}`, {
       // body: JSON.stringify({ quantity: 1 }),
       method: "DELETE",
       headers: {
@@ -117,7 +119,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Cambiar el estado del carrito a En Proceso de pago
     // Configurar la solicitud fetch
-    fetch(`http://localhost:8080/api/carts/${cId}/payment-process`, {
+    fetch(`${API_URL}/api/carts/${cId}/payment-process`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -147,7 +149,7 @@ function updateCart(productId, newQuantity) {
   const cId = cartDiv.dataset.cartId;
 
   // Configurar la solicitud fetch
-  fetch(`http://localhost:8080/api/carts/${cId}/product/${productId}`, {
+  fetch(`${API_URL}/api/carts/${cId}/product/${productId}`, {
     body: JSON.stringify({ quantity: 1 }),
     method: "POST",
     headers: {

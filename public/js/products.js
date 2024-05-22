@@ -28,7 +28,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.log("API_URL 2", API_URL)
 
     let ultCart;
-    //const userCarts = await fetch(`http://localhost:8080/api/carts/user_email/${uEmail}`, {
     const userCarts = await fetch(`${API_URL}/api/carts/user_email/${uEmail}`, {
       method: "GET",
       headers: {
@@ -72,7 +71,7 @@ for (let btn of addToCartBtns) {
 const addProductToCart = async (pId) => {
   try {
     let ultCart;
-    const userCarts = await fetch(`http://localhost:8080/api/carts/user_email/${uEmail}`, {
+    const userCarts = await fetch(`${API_URL}/api/carts/user_email/${uEmail}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -100,7 +99,7 @@ const addProductToCart = async (pId) => {
       const existeProducto = ultCart.products.some((producto) => producto.product === pId);
 
       const result = await fetch(
-        `http://localhost:8080/api/carts/${ultCart._id}/product/${pId}`,
+        `${API_URL}/api/carts/${ultCart._id}/product/${pId}`,
         {
           body: JSON.stringify({ quantity: 1 }),
           method: "POST",
@@ -122,7 +121,7 @@ const addProductToCart = async (pId) => {
         alert("Error, no se pudo agregar");
       }
     } else {
-      const result = await fetch(`http://localhost:8080/api/carts`, {
+      const result = await fetch(`${API_URL}/api/carts`, {
         body: JSON.stringify({
           products: [{ product: pId, quantity: 1 }],
         }),

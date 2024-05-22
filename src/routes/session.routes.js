@@ -13,6 +13,12 @@ import SessionDTO from "../dtos/session.dto.js";
 
 const sessionRoutes = Router();
 
+// Entornos
+const program = new Command()
+program.option('--mode <mode>', 'Modo de trabajo', 'production')
+const options = program.parse()
+const { API_URL } = getVariables(options)
+
 sessionRoutes.post(
   "/register",
   passport.authenticate("register", { failureRedirect: "/failregister" }),
@@ -71,7 +77,7 @@ sessionRoutes.post("/logout", async (req, res) => {
       if (err) {
         return res.status(500).json({ message: "Fallo al realizar Logout" });
       }
-      res.send({ redirect: "http://localhost:8080/login" });
+      res.send({ redirect: `${API_URL}/login` });
     });
   } catch (error) {
     res.status(400).send({ error });

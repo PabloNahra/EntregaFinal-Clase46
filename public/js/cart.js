@@ -161,7 +161,7 @@ function updateCart(productId, newQuantity) {
         throw new Error("Error al actualizar el carrito");
       }
       // Manejar la respuesta si es necesario
-      alert("El carrito se ha actualizado correctamente");
+      // alert("El carrito se ha actualizado correctamente");
     })
     .catch((error) => {
       console.error("Error:", error);

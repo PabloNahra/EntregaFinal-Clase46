@@ -22,3 +22,5 @@ public/img
 imagenes_subir
 
 
+src/.env.development
+src/.env.production

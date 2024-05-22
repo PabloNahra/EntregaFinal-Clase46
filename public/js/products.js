@@ -1,7 +1,15 @@
+//import { obtenerApiUrl } from '/util.js';
+//import { obtenerApiUrl } from "./util.js";
 const userDataDiv = document.getElementById("user-data");
 const firstName = userDataDiv.dataset.firstName;
 const lastName = userDataDiv.dataset.lastName;
 const uEmail = userDataDiv.dataset.email;
+
+/*
+const apiURL = obtenerApiUrl();
+console.log("apiURL")
+console.log(apiURL)
+*/
 
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -11,9 +19,17 @@ document.addEventListener("DOMContentLoaded", async () => {
   const userDataDiv = document.getElementById("user-data");
   const uEmail = userDataDiv.dataset.email;
 
+  //console.log("Probando variable de entorno")
+  //const apiURL = await obtenerApiUrl()
+  //console.log(apiURL)
+
   try {
+
+    console.log("API_URL", API_URL)
+
     let ultCart;
-    const userCarts = await fetch(`http://localhost:8080/api/carts/user_email/${uEmail}`, {
+    //const userCarts = await fetch(`http://localhost:8080/api/carts/user_email/${uEmail}`, {
+    const userCarts = await fetch(`${API_URL}/api/carts/user_email/${uEmail}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

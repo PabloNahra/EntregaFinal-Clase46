@@ -9,6 +9,7 @@ export const getVariables = (options) => {
 
     return {
         NODE_ENV: process.env.NODE_ENV,
+        API_URL: process.env.API_URL,
         PORT: process.env.PORT, 
         MONGO_URL: process.env.MONGO_URL,
         adminName: process.env.adminName,

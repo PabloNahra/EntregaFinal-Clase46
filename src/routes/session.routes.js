@@ -10,14 +10,19 @@ import {
 import { checkRolAdmin } from "../middlewares/auth.js";
 import MailingService from "../services/mailing.js";
 import SessionDTO from "../dtos/session.dto.js";
+import { Command } from 'commander'
+import { getVariables } from '../config/config.js'
 
 const sessionRoutes = Router();
 
 // Entornos
+
 const program = new Command()
 program.option('--mode <mode>', 'Modo de trabajo', 'production')
 const options = program.parse()
 const { API_URL } = getVariables(options)
+
+console.log("API_URL en session", API_URL)
 
 sessionRoutes.post(
   "/register",

@@ -29,7 +29,7 @@ const app = express()
 const program = new Command()
 program.option('--mode <mode>', 'Modo de trabajo', 'production')
 const options = program.parse()
-const { PORT, MONGO_URL } = getVariables(options)
+const { PORT, MONGO_URL, API_URL } = getVariables(options)
 
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
